@@ -11,7 +11,7 @@ import com.github.jbreno.algafood.di.notification.Notifier;
 public class ActivationClientService {
 	
 	@Autowired
-	private List<Notifier> notifiers;
+	private Notifier notifier;
 	
 //	@Autowired
 //	public ActivationClientService(Notifier notifier) {
@@ -26,8 +26,7 @@ public class ActivationClientService {
 	public void active(Client client) {
 		client.active();
 		
-		for(Notifier notifier : notifiers) {
-			notifier.notify(client, "Seu cadastro no sistema está ativo!");
-		}
+		notifier.notify(client, "Seu cadastro no sistema está ativo!");
+		
 	}
 }

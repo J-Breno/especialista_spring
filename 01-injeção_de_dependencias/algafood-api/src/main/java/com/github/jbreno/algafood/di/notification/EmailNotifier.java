@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.github.jbreno.algafood.di.modelo.Client;
 
-@Qualifier("email")
+@Qualifier("urgente")
 @Component
 public class EmailNotifier implements Notifier {
 	

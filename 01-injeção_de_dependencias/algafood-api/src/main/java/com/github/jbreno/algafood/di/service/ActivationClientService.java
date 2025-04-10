@@ -1,8 +1,7 @@
 package com.github.jbreno.algafood.di.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.jbreno.algafood.di.modelo.Client;
 import com.github.jbreno.algafood.di.notification.Notifier;
@@ -10,6 +9,7 @@ import com.github.jbreno.algafood.di.notification.Notifier;
 
 public class ActivationClientService {
 	
+	@Qualifier("email")
 	@Autowired
 	private Notifier notifier;
 	

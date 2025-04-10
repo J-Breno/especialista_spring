@@ -18,3 +18,6 @@
 - é uma classe/objeto que fica dentro do container spring
 - o spring fica responsável por gerenciar essa classe
 - @Component, @Service, @Repository, @Controller, @Configuration são anotações que dizem que essa classe vai ser gerenciada pelo spring
+
+# o que é injeção de dependencias?
+-  A Injeção de Dependência no Spring é como ter um ajudante super eficiente que te entrega tudo o que você precisa PRONTO, sem você ter que se preocupar em fazer ou buscar as coisas. voce desacopla coisas

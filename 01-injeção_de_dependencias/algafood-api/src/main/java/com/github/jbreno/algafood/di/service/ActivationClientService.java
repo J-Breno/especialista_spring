@@ -1,5 +1,8 @@
 package com.github.jbreno.algafood.di.service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.jbreno.algafood.di.modelo.Client;
@@ -14,16 +17,16 @@ public class ActivationClientService {
 	@Autowired
 	private Notifier notifier;
 	
-//	@Autowired
-//	public ActivationClientService(Notifier notifier) {
-//		this.notifier = notifier;
-//	}
+	@PostConstruct
+	public void init() {
+		System.out.println("INIT");
+	}
 	
-//	@Autowired
-//	public void setNotifier(Notifier notifier) {
-//		this.notifier = notifier;
-//	}
-
+	@PreDestroy
+	public void destroy() {
+		System.out.println("DESTROY");
+	}
+	
 	public void active(Client client) {
 		client.active();
 		

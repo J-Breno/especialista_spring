@@ -1,15 +1,16 @@
 package com.github.jbreno.algafood.di.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.github.jbreno.algafood.di.modelo.Client;
+import com.github.jbreno.algafood.di.notification.LevelUrgency;
 import com.github.jbreno.algafood.di.notification.Notifier;
+import com.github.jbreno.algafood.di.notification.TypeNotifier;
 
 
 public class ActivationClientService {
 	
-	@Qualifier("email")
+	@TypeNotifier(LevelUrgency.URGENT)
 	@Autowired
 	private Notifier notifier;
 	

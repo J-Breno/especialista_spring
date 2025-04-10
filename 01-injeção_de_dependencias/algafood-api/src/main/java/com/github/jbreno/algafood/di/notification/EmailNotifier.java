@@ -1,11 +1,10 @@
 package com.github.jbreno.algafood.di.notification;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.github.jbreno.algafood.di.modelo.Client;
 
-@Qualifier("urgente")
+@TypeNotifier(LevelUrgency.URGENT)
 @Component
 public class EmailNotifier implements Notifier {
 	

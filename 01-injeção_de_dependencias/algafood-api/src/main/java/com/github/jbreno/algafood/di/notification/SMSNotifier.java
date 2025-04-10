@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component;
 import com.github.jbreno.algafood.di.modelo.Client;
 
 @Component
-public class EmailNotifier implements Notifier {
+public class SMSNotifier implements Notifier {
 	
 	@Override
 	public void notify(Client client, String message) {
-		System.out.printf("Notificando %s através do e-mail %s: %s/n",
-			client.getName(), client.getEmail(), message);
+		System.out.printf("Notificando %s por SMS através do telefone %s: %s/n",
+			client.getName(), client.getPhone(), message);
 	}
 	
 }

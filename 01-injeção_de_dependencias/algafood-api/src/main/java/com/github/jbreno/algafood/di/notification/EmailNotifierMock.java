@@ -5,18 +5,18 @@ import org.springframework.stereotype.Component;
 
 import com.github.jbreno.algafood.di.modelo.Client;
 
-@Profile("prod")
+@Profile("dev")
 @TypeNotifier(LevelUrgency.URGENT)
 @Component
-public class EmailNotifier implements Notifier {
+public class EmailNotifierMock implements Notifier {
 	
-	public EmailNotifier() {
-		System.out.println("Notificador Email REAL");
+	public EmailNotifierMock() {
+		System.out.println("Notificador Email MOCK");
 	}
 	
 	@Override
 	public void notify(Client client, String message) {
-		System.out.printf("Notificando %s através do e-mail %s: %s/n",
+		System.out.printf("MOCK: Notificação seria enviada para %s através do e-mail %s: %s/n",
 			client.getName(), client.getEmail(), message);
 	}
 	

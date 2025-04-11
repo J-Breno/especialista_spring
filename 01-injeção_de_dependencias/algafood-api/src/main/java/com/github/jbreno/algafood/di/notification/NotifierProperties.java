@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("notifier.email")
 public class NotifierProperties {
 	private String hostServer;
-	private Integer portServer;
+	private Integer portServer = 25;
 	public String getHostServer() {
 		return hostServer;
 	}

@@ -1,2 +1,6 @@
-INSERT INTO tb_kitchen(name) VALUES('Tailandesa');
-INSERT INTO tb_kitchen(name) VALUES('Indiana');
+INSERT INTO tb_kitchen(id, name) VALUES(1, 'Tailandesa');
+INSERT INTO tb_kitchen(id, name) VALUES(2, 'Indiana');
+
+INSERT INTO tb_restaurant(name, shipping_fee, kitchen_id) VALUES('Thai Gourmet', 10, 1);
+INSERT INTO tb_restaurant(name, shipping_fee, kitchen_id) VALUES('Thai Delivery', 9.50, 1);
+INSERT INTO tb_restaurant(name, shipping_fee, kitchen_id) VALUES('Tuk Tuk Comida Indiana', 15, 2);

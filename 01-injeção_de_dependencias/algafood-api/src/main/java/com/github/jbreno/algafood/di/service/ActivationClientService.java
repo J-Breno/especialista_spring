@@ -19,7 +19,7 @@ public class ActivationClientService {
 	
 	@PostConstruct
 	public void init() {
-		System.out.println("INIT");
+		System.out.println("INIT " + notifier);
 	}
 	
 	@PreDestroy

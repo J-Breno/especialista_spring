@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.github.jbreno.algafood.AlgafoodApiApplication;
 import com.github.jbreno.algafood.domain.model.Kitchen;
+import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 
 public class KitchenConsultationMain {
 	public static void main(String[] args) {
@@ -15,11 +16,11 @@ public class KitchenConsultationMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		KitchenRegistration kitchenRegistration = applicationContext.getBean(KitchenRegistration.class);
+		KitchenRepository kitchens = applicationContext.getBean(KitchenRepository.class);
 		
-		 List<Kitchen> kitchens = kitchenRegistration.list();
+		 List<Kitchen> allKitchen = kitchens.all();
 		 
-		 for(Kitchen kitchen : kitchens) {  
+		 for(Kitchen kitchen : allKitchen) {  
 			 System.out.println(kitchen.getName());
 		 }
 	}

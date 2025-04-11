@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.github.jbreno.algafood.AlgafoodApiApplication;
 import com.github.jbreno.algafood.domain.model.Kitchen;
+import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 
 public class KitchenChangeMain {
 	public static void main(String[] args) {
@@ -13,12 +14,12 @@ public class KitchenChangeMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		KitchenRegistration kitchenRegistration = applicationContext.getBean(KitchenRegistration.class);
+		KitchenRepository kitchenRepository = applicationContext.getBean(KitchenRepository.class);
 		
 		 Kitchen kitchen1 = new Kitchen();
 		 kitchen1.setId(1L);
 		 kitchen1.setName("Brasileira");
-		 kitchenRegistration.save(kitchen1);
+		 kitchenRepository.save(kitchen1);
 		 
 }
 }

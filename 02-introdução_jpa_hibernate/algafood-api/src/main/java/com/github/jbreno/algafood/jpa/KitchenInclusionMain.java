@@ -1,7 +1,5 @@
 package com.github.jbreno.algafood.jpa;
 
-import java.util.List;
-
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -9,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import com.github.jbreno.algafood.AlgafoodApiApplication;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 
-public class KitchenConsultationMain {
+public class KitchenInclusionMain {
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE)
@@ -17,10 +15,16 @@ public class KitchenConsultationMain {
 		
 		KitchenRegistration kitchenRegistration = applicationContext.getBean(KitchenRegistration.class);
 		
-		 List<Kitchen> kitchens = kitchenRegistration.list();
+		 Kitchen kitchen1 = new Kitchen();
+		 kitchen1.setName("Brasileira");
 		 
-		 for(Kitchen kitchen : kitchens) {  
-			 System.out.println(kitchen.getName());
-		 }
+		 Kitchen kitchen2 = new Kitchen();
+		 kitchen2.setName("Japonesa");
+		 
+		kitchen1 = kitchenRegistration.add(kitchen1);
+		kitchen2 =  kitchenRegistration.add(kitchen2);
+		
+		System.out.printf("%d - %s\n", kitchen1.getId(), kitchen1.getName());
+		System.out.printf("%d - %s\n", kitchen2.getId(), kitchen2.getName());
 	}
 }

@@ -19,5 +19,12 @@
 - o spring fica responsável por gerenciar essa classe
 - @Component, @Service, @Repository, @Controller, @Configuration são anotações que dizem que essa classe vai ser gerenciada pelo spring
 
-# o que é injeção de dependencias?
+# o que é injeção de dependências?
 -  A Injeção de Dependência no Spring é como ter um ajudante super eficiente que te entrega tudo o que você precisa PRONTO, sem você ter que se preocupar em fazer ou buscar as coisas. voce desacopla coisas
+
+# O que é persistência de dados?
+- preservar os dados após a utilização do software
+
+# O que é JPA e Hibernate?
+- jpa é um ORM para java, descreve a solução
+- hibernate é o produto, implementa a solução

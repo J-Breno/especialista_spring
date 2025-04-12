@@ -28,3 +28,6 @@
 # O que é JPA e Hibernate?
 - jpa é um ORM para java, descreve a solução
 - hibernate é o produto, implementa a solução
+
+# O que é REST?
+- REST é um modelo arquitetural, é uma especificação que definie a forma de comunicação entre componentes na web, modelo arquitetural para desenvolvimento de web services;

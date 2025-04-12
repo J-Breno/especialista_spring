@@ -31,3 +31,7 @@
 
 # O que é REST?
 - REST é um modelo arquitetural, é uma especificação que definie a forma de comunicação entre componentes na web, modelo arquitetural para desenvolvimento de web services;
+
+# REST vs RESTful
+- rest é o estilo arquitetural que possui as constraints, é a especificação
+- restful é uma api em conformidade das constaints

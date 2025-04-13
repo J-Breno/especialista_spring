@@ -7,16 +7,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@JsonRootName("cozinha")
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "tb_kitchen")
 public class Kitchen {
 	
-	@Id
+	@Id	
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

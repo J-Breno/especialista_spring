@@ -3,7 +3,9 @@ package com.github.jbreno.algafood.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +34,10 @@ public class KitchenController {
 	}
 
 	@GetMapping("/{id}")
-	public Kitchen search(@PathVariable Long id) {
-		return kitchenRepository.search(id);
+	public ResponseEntity<Kitchen> search(@PathVariable Long id) {
+		Kitchen kitchen = kitchenRepository.search(id);
+//		return ResponseEntity.status(HttpStatus.OK).body(kitchen);
+		return ResponseEntity.ok(kitchen);
 	}
 
 }

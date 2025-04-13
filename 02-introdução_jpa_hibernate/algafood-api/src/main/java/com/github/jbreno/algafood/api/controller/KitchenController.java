@@ -36,8 +36,12 @@ public class KitchenController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Kitchen> search(@PathVariable Long id) {
 		Kitchen kitchen = kitchenRepository.search(id);
+		
+		if(kitchen != null) {
+			return ResponseEntity.ok(kitchen);
+		}
 //		return ResponseEntity.status(HttpStatus.OK).body(kitchen);
-		return ResponseEntity.ok(kitchen);
+		return ResponseEntity.notFound().build();
 	}
 
 }

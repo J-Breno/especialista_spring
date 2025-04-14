@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.jbreno.algafood.api.model.KitchensXmlWrapper;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.Kitchen;
@@ -41,11 +38,6 @@ public class KitchenController {
 		return kitchenRepository.all();
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-	public KitchensXmlWrapper listXml() {
-		return new KitchensXmlWrapper(kitchenRepository.all());
-	}
-
 	@GetMapping("/{id}")
 	public ResponseEntity<Kitchen> search(@PathVariable Long id) {
 		Kitchen kitchen = kitchenRepository.search(id);
@@ -69,7 +61,7 @@ public class KitchenController {
 		
 		if(kitchen2 != null) {
 			BeanUtils.copyProperties(kitchen, kitchen2, "id");
-			kitchenRepository.save(kitchen2);
+			kitchenService.save(kitchen2);
 			return ResponseEntity.ok(kitchen2);
 		} 
 			

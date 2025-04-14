@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.model.KitchensXmlWrapper;
+import com.github.jbreno.algafood.domain.exception.EntityInUseException;
+import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
@@ -77,15 +79,12 @@ public class KitchenController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> remover(@PathVariable Long id) {
 		try {
-			Kitchen kitchen = kitchenRepository.search(id);
-			
-			if(kitchen != null) {
-				kitchenRepository.remove(kitchen);
-				return ResponseEntity.noContent().build();
-			}
-			
+			kitchenService.remove(id);
+			return ResponseEntity.noContent().build();		
+		} catch (EntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
-		} catch (DataIntegrityViolationException e) {
+		}
+		catch (EntityInUseException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}

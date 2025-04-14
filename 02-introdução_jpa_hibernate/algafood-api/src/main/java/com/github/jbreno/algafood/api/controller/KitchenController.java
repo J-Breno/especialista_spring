@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.jbreno.algafood.api.model.KitchensXmlWrapper;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.repository.KitchenRepository;
+import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
 
 
 @RestController
@@ -29,6 +30,9 @@ public class KitchenController {
 	
 	@Autowired
 	private KitchenRepository kitchenRepository;
+	
+	@Autowired
+	private KitchenRegistrationService kitchenService;
 	
 	@GetMapping
 	public List<Kitchen> list() {
@@ -53,8 +57,8 @@ public class KitchenController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen adcionar(@RequestBody Kitchen kitchen) {
-		return kitchenRepository.save(kitchen);
+	public Kitchen add(@RequestBody Kitchen kitchen) {
+		return kitchenService.save(kitchen);
 	}
 	
 	@PutMapping("/{id}")

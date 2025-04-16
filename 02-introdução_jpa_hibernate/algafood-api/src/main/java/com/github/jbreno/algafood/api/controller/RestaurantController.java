@@ -2,12 +2,14 @@ package com.github.jbreno.algafood.api.controller;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -46,6 +48,22 @@ public class RestaurantController {
 		  return ResponseEntity.status(HttpStatus.CREATED)
 				  .body(restaurant);
 		} catch(EntityNotFoundException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Restaurant restaurant) {
+		try {
+			Restaurant restaurant2 = restaurantService.search(id);
+			if(restaurant2 != null) { 
+				BeanUtils.copyProperties(restaurant, restaurant2, "id", "paymentsMethod");
+				restaurantService.save(restaurant2);
+				return ResponseEntity.ok(restaurant2);
+			}
+			
+			return ResponseEntity.notFound().build();	
+		} catch (EntityNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

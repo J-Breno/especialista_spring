@@ -56,7 +56,7 @@ public class KitchenController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Kitchen> atualizar(@PathVariable Long id, @RequestBody Kitchen kitchen) {	
+	public ResponseEntity<Kitchen> update(@PathVariable Long id, @RequestBody Kitchen kitchen) {	
 		Kitchen kitchen2 = kitchenRepository.search(id);
 		
 		if(kitchen2 != null) {

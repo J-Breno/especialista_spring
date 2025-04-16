@@ -15,7 +15,6 @@ INSERT INTO tb_permission(id, name, description) VALUES(3, 'Excluir pedidos', 'p
 
 INSERT INTO tb_state(id, name) VALUES(1, 'Ceará');
 INSERT INTO tb_state(id, name) VALUES(2, 'Paraná');
-INSERT INTO tb_state(id, name) VALUES(1, 'Ceará');
 
 INSERT INTO tb_city(id, name, state_id) VALUES(1, 'Fortaleza', 1);
 INSERT INTO tb_city(id, name, state_id) VALUES(2, 'Caucaia', 1);

@@ -15,50 +15,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
-import com.github.jbreno.algafood.domain.model.Restaurant;
-import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
+import com.github.jbreno.algafood.domain.model.City;
+import com.github.jbreno.algafood.domain.service.CityRegistrationService;
 
 @RestController
-@RequestMapping(value = "/restaurants")
-public class RestaurantController {
+@RequestMapping("/cities")
+public class CityController {
 	
 	@Autowired
-	private RestaurantRegistrationService restaurantService;
+	private CityRegistrationService cityService;
 	
 	@GetMapping
-	public List<Restaurant> list() {
-		return restaurantService.list();
+	public List<City> list() {
+		return cityService.list();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Restaurant> search(@PathVariable Long id) {
-		Restaurant restaurant = restaurantService.search(id);
+	public ResponseEntity<City> search(@PathVariable Long id) {
+		City City = cityService.search(id);
 		
-		if(restaurant != null) {
-			return ResponseEntity.ok(restaurant);
+		if(City != null) {
+			return ResponseEntity.ok(City);
 		}
 		return ResponseEntity.notFound().build();
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> add(@RequestBody Restaurant restaurant) {
+	public ResponseEntity<?> add(@RequestBody City City) {
 		try {
-		  restaurant = restaurantService.save(restaurant);
+		  City = cityService.save(City);
 		  return ResponseEntity.status(HttpStatus.CREATED)
-				  .body(restaurant);
+				  .body(City);
 		} catch(EntityNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Restaurant restaurant) {
+	public ResponseEntity<?> update(@PathVariable Long id,@RequestBody City city) {
 		try {
-			Restaurant restaurant2 = restaurantService.search(id);
-			if(restaurant2 != null) { 
-				BeanUtils.copyProperties(restaurant, restaurant2, "id", "paymentsMethod");
-				restaurantService.save(restaurant2);
-				return ResponseEntity.ok(restaurant2);
+			City city2 = cityService.search(id);
+			if(city2 != null) { 
+				BeanUtils.copyProperties(city, city2, "id", "paymentsMethod");
+				cityService.save(city2);
+				return ResponseEntity.ok(city2);
 			}
 			
 			return ResponseEntity.notFound().build();	
@@ -66,4 +66,5 @@ public class RestaurantController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+	
 }

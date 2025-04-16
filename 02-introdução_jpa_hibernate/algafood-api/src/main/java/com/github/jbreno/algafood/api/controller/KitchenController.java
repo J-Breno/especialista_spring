@@ -69,7 +69,7 @@ public class KitchenController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remover(@PathVariable Long id) {
+	public ResponseEntity<Void> remove(@PathVariable Long id) {
 		try {
 			kitchenService.remove(id);
 			return ResponseEntity.noContent().build();		

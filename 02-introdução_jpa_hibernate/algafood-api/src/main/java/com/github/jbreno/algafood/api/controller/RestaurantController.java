@@ -1,12 +1,16 @@
 package com.github.jbreno.algafood.api.controller;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
@@ -65,5 +70,33 @@ public class RestaurantController {
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+	
+	@PatchMapping
+	public ResponseEntity<?> partiallyUpdate(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+		Restaurant restaurant2 = restaurantService.search(id);
+		
+		if(restaurant2 == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		merge(campos, restaurant2);
+		
+		return update(id, restaurant2);
+	}
+
+	private void merge(Map<String, Object> campos, Restaurant restaurant) {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		Restaurant restaurant00 = objectMapper.convertValue(campos, Restaurant.class);
+		campos.forEach((nomePropriedade, valorPropriedade) -> {
+			Field field = ReflectionUtils.findField(Restaurant.class, nomePropriedade);
+			
+			field.setAccessible(true);
+			
+			Object newValue = ReflectionUtils.getField(field, restaurant00);
+			
+			ReflectionUtils.setField(field, restaurant, newValue);
+		});
 	}
 }

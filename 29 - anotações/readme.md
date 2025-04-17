@@ -35,3 +35,9 @@
 # REST vs RESTful
 - rest é o estilo arquitetural que possui as constraints, é a especificação
 - restful é uma api em conformidade das constaints
+
+# Modelo de maturidade de Richardson
+- O nivel 0 é o POX não é REST
+- O nível 1 é o Recursos, mas ainda não é REST
+- O nível 2 é Verbos HTTP. ele é REST
+- O nível 3 é HATEOAS. ele é a glória do REST

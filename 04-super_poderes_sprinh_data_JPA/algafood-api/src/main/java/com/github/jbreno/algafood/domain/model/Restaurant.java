@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,9 +31,11 @@ public class Restaurant {
 	@Column(nullable = false)
 	private BigDecimal shippingFee;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
+	
 	
 	@ManyToOne
 	@JoinColumn(nullable = false)

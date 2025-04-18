@@ -1,6 +1,7 @@
 package com.github.jbreno.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,15 @@ public class KitchenController {
 	
 	@GetMapping
 	public List<Kitchen> list() {
-		return kitchenRepository.all();
+		return kitchenRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Kitchen> search(@PathVariable Long id) {
-		Kitchen kitchen = kitchenRepository.search(id);
+		Optional<Kitchen> kitchen = kitchenRepository.findById(id);
 		
-		if(kitchen != null) {
-			return ResponseEntity.ok(kitchen);
+		if(kitchen.isPresent()) {
+			return ResponseEntity.ok(kitchen.get());
 		}
 //		return ResponseEntity.status(HttpStatus.OK).body(kitchen);
 		return ResponseEntity.notFound().build();
@@ -57,12 +58,12 @@ public class KitchenController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Kitchen> update(@PathVariable Long id, @RequestBody Kitchen kitchen) {	
-		Kitchen kitchen2 = kitchenRepository.search(id);
+		Optional<Kitchen> kitchen2 = kitchenRepository.findById(id);
 		
-		if(kitchen2 != null) {
-			BeanUtils.copyProperties(kitchen, kitchen2, "id");
-			kitchenService.save(kitchen2);
-			return ResponseEntity.ok(kitchen2);
+		if(kitchen2.isPresent()) {
+			BeanUtils.copyProperties(kitchen, kitchen2.get(), "id");
+			Kitchen kitchenSave = kitchenService.save(kitchen2.get());
+			return ResponseEntity.ok(kitchenSave);
 		} 
 			
 		return ResponseEntity.notFound().build();

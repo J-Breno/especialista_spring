@@ -1,6 +1,7 @@
 package com.github.jbreno.algafood.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,11 +20,12 @@ public class StateRegistrationService {
 	private StateRepository stateRepository;
 	
 	public List<State> list() {
-		return stateRepository.all();
+		return stateRepository.findAll();
 	}
 	
 	public State search(Long id) {
-		return stateRepository.search(id);
+		Optional<State> state =  stateRepository.findById(id);
+		return state.get();
 	}
 	
 	public State save(State state) {
@@ -32,7 +34,7 @@ public class StateRegistrationService {
 	
 	public void remove (Long id) {
 		try {
-			stateRepository.remove(id);
+			stateRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(
 					String.format("Não existe um cadastro de cozinha com código %d", id));

@@ -1,6 +1,7 @@
 package com.github.jbreno.algafood.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,30 +25,31 @@ public class CityRegistrationService {
 	private StateRepository stateRepository;
 	
 	public List<City> list() {
-		return cityRepository.all();
+		return cityRepository.findAll();
 	}
 	
 	public City search(Long id) {
-		return cityRepository.search(id);
+		Optional<City> city =  cityRepository.findById(id);
+		return city.get();
 	}
 	
 	public City save(City city) {
 		Long stateId = city.getState().getId();
-		State state = stateRepository.search(stateId);
+		Optional<State> state = stateRepository.findById(stateId);
 		
-		if(state == null) {
+		if(state.isEmpty()) {
 			throw new EntityNotFoundException(
 					String.format("Não existe cadastro de cozinha com código %d", stateId));
 		}
 		
-		city.setState(state);
+		city.setState(state.get());
 		
 		return cityRepository.save(city);
 	}
 	
 	public void remove (Long id) {
 		try {
-			cityRepository.remove(id);
+			cityRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(
 					String.format("Não existe um cadastro de cidade com código %d", id));

@@ -21,11 +21,13 @@ public class RestaurantRegistrationService {
 	private KitchenRepository kitchenRepository;
 	
 	public List<Restaurant> list() {
-		return restaurantRepository.all();
+		return restaurantRepository.findAll();
 	}
 
 	public Restaurant search(Long id) {
-		return restaurantRepository.search(id);
+		Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+				String.format("Não existe cadastro de cozinha com código %d", id)));
+		return restaurant;
 	}
 	
 	public Restaurant save(Restaurant restaurant) {

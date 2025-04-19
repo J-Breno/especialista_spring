@@ -1,4 +1,4 @@
-package com.github.jbreno.algafood.domain.model;
+	package com.github.jbreno.algafood.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

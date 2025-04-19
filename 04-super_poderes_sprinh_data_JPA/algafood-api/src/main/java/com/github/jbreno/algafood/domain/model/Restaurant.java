@@ -41,11 +41,11 @@ public class Restaurant {
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 	
+	@JsonIgnore
 	@Embedded
 	private Address address;
 	
 	@ManyToMany
-	@JsonIgnore
 	@JoinTable(name = "tb_restaurant_payment_method",
 			joinColumns = @JoinColumn(name = "restaurant_id"),
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id"))

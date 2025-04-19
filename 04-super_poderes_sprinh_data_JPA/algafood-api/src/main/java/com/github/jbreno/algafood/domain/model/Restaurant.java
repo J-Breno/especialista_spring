@@ -1,6 +1,8 @@
 package com.github.jbreno.algafood.domain.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -37,7 +41,10 @@ public class Restaurant {
 	private Kitchen kitchen;
 	
 	
-	@ManyToOne
+	@ManyToMany
 	@JoinColumn(nullable = false)
-	private PaymentMethod paymentsMethod;
+	@JoinTable(name = "tb_restaurant_payment_method",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
+	private List<PaymentMethod> paymentsMethod = new ArrayList<>();
 }

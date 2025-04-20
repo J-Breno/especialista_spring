@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
+import com.github.jbreno.algafood.domain.repository.RestaurantRepository;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
 @RestController
@@ -29,6 +30,9 @@ public class RestaurantController {
 	
 	@Autowired
 	private RestaurantRegistrationService restaurantService;
+	
+	@Autowired
+	private RestaurantRepository restaurantRepository;
 	
 	@GetMapping
 	public List<Restaurant> list() {
@@ -59,10 +63,10 @@ public class RestaurantController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Restaurant restaurant) {
 		try {
-			Restaurant restaurant2 = restaurantService.search(id);
+			Restaurant restaurant2 = restaurantRepository.findById(id).orElse(null);
 			if(restaurant2 != null) { 
-				BeanUtils.copyProperties(restaurant, restaurant2, "id", "address");
-				restaurantService.save(restaurant2);
+				BeanUtils.copyProperties(restaurant, restaurant2, "id", "paymentsMethod", "address", "registrationDate");
+				restaurant2 = restaurantService.save(restaurant2);
 				return ResponseEntity.ok(restaurant2);
 			}
 			

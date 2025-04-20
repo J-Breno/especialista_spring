@@ -61,7 +61,7 @@ public class KitchenController {
 		Optional<Kitchen> kitchen2 = kitchenRepository.findById(id);
 		
 		if(kitchen2.isPresent()) {
-			BeanUtils.copyProperties(kitchen, kitchen2.get(), "id");
+			BeanUtils.copyProperties(kitchen, kitchen2.get(), "id", "restaurants");
 			Kitchen kitchenSave = kitchenService.save(kitchen2.get());
 			return ResponseEntity.ok(kitchenSave);
 		} 

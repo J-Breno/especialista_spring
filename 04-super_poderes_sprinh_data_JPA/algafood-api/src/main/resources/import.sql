@@ -11,9 +11,9 @@ INSERT INTO tb_city(id, name, state_id) VALUES(3, 'Fortaleza', 3);
 INSERT INTO tb_city(id, name, state_id) VALUES(4, 'São Paulo', 2);
 INSERT INTO tb_city(id, name, state_id) VALUES(5, 'Campinas', 2);
 
-INSERT INTO tb_restaurant(id, name, shipping_fee, kitchen_id, address_city_id, address_cep, address_street,address_number, address_neighborhood ) VALUES(1, 'Thai Gourmet', 10, 1, 1, '38499-00', 'Rua João Pìnheiro', '1000', 'Centro');
-INSERT INTO tb_restaurant(name, shipping_fee, kitchen_id, payments_method_id) VALUES('Thai Delivery', 9.50, 1, 3);
-INSERT INTO tb_restaurant(name, shipping_fee, kitchen_id, payments_method_id) VALUES('Tuk Tuk Comida Indiana', 15, 2, 1);
+INSERT INTO tb_restaurant(id, name, shipping_fee, kitchen_id, registration_date, update_date, address_city_id, address_cep, address_street,address_number, address_neighborhood, address_complement ) VALUES(1, 'Thai Gourmet', 10, 1,utc_timestamp, utc_timestamp, 1, '38499-00', 'Rua João Pìnheiro', '1000', 'Centro', 'Perto dali');
+INSERT INTO tb_restaurant(id, name, shipping_fee, kitchen_id, registration_date, update_date, address_city_id, address_cep, address_street,address_number, address_neighborhood, address_complement ) VALUES(2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp, 1, '38455-00', 'Rua Padre Pìnheiro', '1623', 'Aldeota', 'Perto de cá');
+INSERT INTO tb_restaurant(id, name, shipping_fee, kitchen_id, registration_date, update_date, address_city_id, address_cep, address_street,address_number, address_neighborhood, address_complement ) VALUES(3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp, 1, '32699-00', 'Rua João Moura', '1712', 'Meireles', 'Perto de lá');
 
 
 INSERT INTO tb_payment_method(id, description) VALUES(1, 'Cartão de crédito');
@@ -25,8 +25,8 @@ INSERT INTO tb_permission(id, name, description) VALUES(1, 'CONSULTAR_COZINHAS',
 INSERT INTO tb_permission(id, name, description) VALUES(2, 'EDITAR_COZINHAS', 'pode atualizar pedidos');
 
 
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(1,2);
+INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(1, 2);
 INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(1, 3);
-INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(2,3);
+INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(2, 3);
 INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(3, 2);
 INSERT INTO tb_restaurant_payment_method(restaurant_id, payment_method_id) VALUES(3, 3);

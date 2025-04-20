@@ -1,4 +1,4 @@
-	package com.github.jbreno.algafood.domain.model;
+package com.github.jbreno.algafood.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +15,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "tb_payment_method")
 public class PaymentMethod {
-	@EqualsAndHashCode.Include
+	
 	@Id
+	@EqualsAndHashCode.Include	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@Column(nullable = false)
 	private String description;
 }

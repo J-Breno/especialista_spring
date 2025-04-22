@@ -13,6 +13,12 @@ import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 @Service
 public class KitchenRegistrationService {
 	
+	private static final String MSG_KITCHEN_IN_USE 
+		= "Cozinha de código %d não pode ser removida, pois está em uso";
+
+	private static final String MSG_KITCHEN_NOT_FOUND
+		= "Não existe um cadastro de cozinha com código %d";
+	
 	@Autowired
 	private KitchenRepository kitchenRepository;
 	
@@ -25,11 +31,16 @@ public class KitchenRegistrationService {
 			kitchenRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(
-					String.format("Não existe um cadastro de cozinha com código %d", id));
+					String.format(MSG_KITCHEN_NOT_FOUND, id));
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
-					String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
+					String.format(MSG_KITCHEN_IN_USE, id));
 		}
+	}
+	
+	public Kitchen searchOrFail(Long id) {
+		return kitchenRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
 	}
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.jbreno.algafood.domain.exception.BusinessException;
+import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.service.CityRegistrationService;
 
@@ -37,10 +38,14 @@ public class CityController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<City> add(@RequestBody City city) {
-		city = cityService.save(city);
-		  return ResponseEntity.status(HttpStatus.CREATED)
-				  .body(city);
+	@ResponseStatus(HttpStatus.CREATED)
+	public City add(@RequestBody City city) {
+		try {
+			return cityService.save(city);
+		}
+		catch(EntityNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
 	
 	@PutMapping("/{id}")
@@ -48,8 +53,12 @@ public class CityController {
 		City currentCity = cityService.searchOrFail(id);
 		
 		BeanUtils.copyProperties(city, currentCity, "id", "paymentsMethod");
-		
-		return cityService.save(currentCity);
+		try {
+			return cityService.save(currentCity);
+		}
+		catch(EntityNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{id}")

@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
@@ -45,6 +46,7 @@ private static final String MSG_CITY_NOT_FOUND
 		city.setState(state);
 		
 		return cityRepository.save(city);
+	
 	}
 	
 	public void remove (Long id) {

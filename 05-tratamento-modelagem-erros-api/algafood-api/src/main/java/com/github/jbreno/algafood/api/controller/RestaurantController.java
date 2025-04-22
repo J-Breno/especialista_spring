@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jbreno.algafood.domain.exception.BusinessException;
+import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
@@ -48,12 +50,15 @@ public class RestaurantController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Restaurant> add(@RequestBody Restaurant restaurant) {
-		restaurant = restaurantService.save(restaurant);
-		  return ResponseEntity.status(HttpStatus.CREATED)
-				  .body(restaurant);
-	}
-	
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurant add(@RequestBody Restaurant restaurant) {
+		try {
+			return restaurantService.save(restaurant);
+		}
+		catch(EntityNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
+	}	
 	@PutMapping("/{id}")
 	public Restaurant update(@PathVariable Long id,@RequestBody Restaurant restaurant) {
 		Restaurant currentRestaurant = restaurantService.searchOrFail(id);
@@ -61,7 +66,12 @@ public class RestaurantController {
 		BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentsMethod", "address", "registrationDate", "products");
 		currentRestaurant = restaurantService.save(currentRestaurant);
 		
-		return restaurantService.save(currentRestaurant);
+		try {
+			return restaurantService.save(currentRestaurant);
+		}
+		catch(EntityNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 		
 	}
 	

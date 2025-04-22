@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class Problem {
 
-	private LocalDateTime dataHora;
+	private LocalDateTime dateTime;
 	
 	private String message;
 	

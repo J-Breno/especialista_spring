@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
-import com.github.jbreno.algafood.domain.repository.RestaurantRepository;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
 @RestController
@@ -31,8 +31,6 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantRegistrationService restaurantService;
 	
-	@Autowired
-	private RestaurantRepository restaurantRepository;
 	
 	@GetMapping
 	public List<Restaurant> list() {
@@ -50,39 +48,32 @@ public class RestaurantController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> add(@RequestBody Restaurant restaurant) {
-		try {
-		  restaurant = restaurantService.save(restaurant);
+	public ResponseEntity<Restaurant> add(@RequestBody Restaurant restaurant) {
+		restaurant = restaurantService.save(restaurant);
 		  return ResponseEntity.status(HttpStatus.CREATED)
 				  .body(restaurant);
-		} catch(EntityNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Restaurant restaurant) {
-		try {
-			Restaurant restaurant2 = restaurantRepository.findById(id).orElse(null);
-			if(restaurant2 != null) { 
-				BeanUtils.copyProperties(restaurant, restaurant2, "id", "paymentsMethod", "address", "registrationDate");
-				restaurant2 = restaurantService.save(restaurant2);
-				return ResponseEntity.ok(restaurant2);
-			}
-			
-			return ResponseEntity.notFound().build();	
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	public Restaurant update(@PathVariable Long id,@RequestBody Restaurant restaurant) {
+		Restaurant currentRestaurant = restaurantService.searchOrFail(id);
+		
+		BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentsMethod", "address", "registrationDate", "products");
+		currentRestaurant = restaurantService.save(currentRestaurant);
+		
+		return restaurantService.save(currentRestaurant);
+		
+	}
+	
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remove(@PathVariable Long id) {	
+		restaurantService.remove(id);
 	}
 	
 	@PatchMapping
-	public ResponseEntity<?> partiallyUpdate(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+	public Restaurant partiallyUpdate(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
 		Restaurant restaurant2 = restaurantService.search(id);
-		
-		if(restaurant2 == null) {
-			return ResponseEntity.notFound().build();
-		}
 		
 		merge(campos, restaurant2);
 		

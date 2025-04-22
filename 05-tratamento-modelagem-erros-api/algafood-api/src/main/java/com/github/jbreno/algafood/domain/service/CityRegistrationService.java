@@ -13,16 +13,21 @@ import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.State;
 import com.github.jbreno.algafood.domain.repository.CityRepository;
-import com.github.jbreno.algafood.domain.repository.StateRepository;
 
 @Service
 public class CityRegistrationService {
+	
+	private static final String MSG_CITY_IN_USE 
+	= "Cidade de código %d não pode ser removida, pois está em uso";
+
+private static final String MSG_CITY_NOT_FOUND
+	= "Não existe um cadastro de cidade com código %d";
 	
 	@Autowired
 	private CityRepository cityRepository;
 	
 	@Autowired
-	private StateRepository stateRepository;
+	private StateRegistrationService stateService;
 	
 	public List<City> list() {
 		return cityRepository.findAll();
@@ -35,14 +40,9 @@ public class CityRegistrationService {
 	
 	public City save(City city) {
 		Long stateId = city.getState().getId();
-		Optional<State> state = stateRepository.findById(stateId);
+		State state = stateService.searchOrFail(stateId);
 		
-		if(state.isEmpty()) {
-			throw new EntityNotFoundException(
-					String.format("Não existe cadastro de cozinha com código %d", stateId));
-		}
-		
-		city.setState(state.get());
+		city.setState(state);
 		
 		return cityRepository.save(city);
 	}
@@ -52,14 +52,17 @@ public class CityRegistrationService {
 			cityRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(
-					String.format("Não existe um cadastro de cidade com código %d", id));
+					String.format(MSG_CITY_NOT_FOUND, id));
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
-					String.format("codade de código %d não pode ser removida, pois está em uso", id));
+					String.format(MSG_CITY_IN_USE, id));
 		}
-		
-		
+	}
+	
+	public City searchOrFail(Long id) {
+		return cityRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id)));
 	}
 	
 }

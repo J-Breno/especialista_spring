@@ -47,4 +47,3 @@
 
 # LAZY loading
 - Sempre que for ToMany é lazy
-

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.github.jbreno.algafood.domain.exception.BusinessException;
+import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 
 
@@ -31,6 +32,16 @@ public class ApiExceptionHandler {
 				.message(e.getMessage()).build();
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(problem);
+	}
+	
+	@ExceptionHandler(EntityInUseException.class)
+	public ResponseEntity<?> treatEntityInUseException(EntityInUseException e) {
+		Problem problem = Problem.builder()
+				.dateTime(LocalDateTime.now())
+				.message(e.getMessage()).build();
+		
+		return ResponseEntity.status(HttpStatus.CONFLICT)
 				.body(problem);
 	}
 	

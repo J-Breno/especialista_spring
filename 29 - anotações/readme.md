@@ -41,3 +41,10 @@
 - O nível 1 é o Recursos, mas ainda não é REST
 - O nível 2 é Verbos HTTP. ele é REST
 - O nível 3 é HATEOAS. ele é a glória do REST
+
+# EAGER Loading
+- Sempre que for ToOne é eager
+
+# LAZY loading
+- Sempre que for ToMany é lazy
+

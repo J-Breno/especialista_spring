@@ -8,8 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.github.jbreno.algafood.domain.exception.CityNotFoundException;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.State;
 import com.github.jbreno.algafood.domain.repository.CityRepository;
@@ -19,9 +19,6 @@ public class CityRegistrationService {
 	
 	private static final String MSG_CITY_IN_USE 
 	= "Cidade de código %d não pode ser removida, pois está em uso";
-
-private static final String MSG_CITY_NOT_FOUND
-	= "Não existe um cadastro de cidade com código %d";
 	
 	@Autowired
 	private CityRepository cityRepository;
@@ -52,8 +49,7 @@ private static final String MSG_CITY_NOT_FOUND
 		try {
 			cityRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(
-					String.format(MSG_CITY_NOT_FOUND, id));
+			throw new CityNotFoundException(id);
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -63,7 +59,7 @@ private static final String MSG_CITY_NOT_FOUND
 	
 	public City searchOrFail(Long id) {
 		return cityRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_CITY_NOT_FOUND, id)));
+				.orElseThrow(() -> new CityNotFoundException(id));
 	}
 	
 }

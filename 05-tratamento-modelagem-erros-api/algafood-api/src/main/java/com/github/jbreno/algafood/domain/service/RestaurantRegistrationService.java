@@ -8,7 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
+import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.repository.RestaurantRepository;
@@ -18,9 +18,6 @@ public class RestaurantRegistrationService {
 	
 	private static final String MSG_RESTAURANT_IN_USE 
 		= "Restaurante de código %d não pode ser removida, pois está em uso";
-
-	private static final String MSG_RESTAURANT_NOT_FOUND
-		= "Não existe um cadastro de restaurante com código %d";
 	
 	@Autowired
 	private RestaurantRepository restaurantRepository;
@@ -49,8 +46,7 @@ public class RestaurantRegistrationService {
 		try {
 			restaurantRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(
-					String.format(MSG_RESTAURANT_NOT_FOUND, id));
+			throw new RestaurantNotFoundException(id);
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -60,6 +56,6 @@ public class RestaurantRegistrationService {
 	
 	public Restaurant searchOrFail(Long id) {
 		return restaurantRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
+				.orElseThrow(() -> new RestaurantNotFoundException(id));
 	}
 }

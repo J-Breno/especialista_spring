@@ -6,7 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
+import com.github.jbreno.algafood.domain.exception.KitchenNotFoundException;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 
@@ -15,9 +15,6 @@ public class KitchenRegistrationService {
 	
 	private static final String MSG_KITCHEN_IN_USE 
 		= "Cozinha de código %d não pode ser removida, pois está em uso";
-
-	private static final String MSG_KITCHEN_NOT_FOUND
-		= "Não existe um cadastro de cozinha com código %d";
 	
 	@Autowired
 	private KitchenRepository kitchenRepository;
@@ -30,8 +27,7 @@ public class KitchenRegistrationService {
 		try {
 			kitchenRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(
-					String.format(MSG_KITCHEN_NOT_FOUND, id));
+			throw new KitchenNotFoundException(id);
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -41,6 +37,6 @@ public class KitchenRegistrationService {
 	
 	public Kitchen searchOrFail(Long id) {
 		return kitchenRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
+				.orElseThrow(() -> new KitchenNotFoundException(id));
 	}
 }

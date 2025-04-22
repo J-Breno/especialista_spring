@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
+import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
@@ -55,8 +55,8 @@ public class RestaurantController {
 		try {
 			return restaurantService.save(restaurant);
 		}
-		catch(EntityNotFoundException e) {
-			throw new BusinessException(e.getMessage());
+		catch(RestaurantNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
 	}	
 	@PutMapping("/{id}")
@@ -69,8 +69,8 @@ public class RestaurantController {
 		try {
 			return restaurantService.save(currentRestaurant);
 		}
-		catch(EntityNotFoundException e) {
-			throw new BusinessException(e.getMessage());
+		catch(RestaurantNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
 		}
 		
 	}

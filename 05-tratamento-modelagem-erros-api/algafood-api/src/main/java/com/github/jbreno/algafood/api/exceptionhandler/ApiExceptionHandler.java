@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -18,19 +19,47 @@ import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ProblemType problemType = ProblemType.INCOMPREHENSIBLE_MESSAGE;
+		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+				
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		return handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
+	}
+	
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<?> treatEntityNotFoundException(EntityNotFoundException e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ProblemType problemType = ProblemType.ENTITY_NOT_FOUND;
+		String detail = e.getMessage();
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<?> treatBusinessException(BusinessException e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+		HttpStatus status = HttpStatus.CONFLICT;
+		ProblemType problemType = ProblemType.ERROR_BUSINESS;
+		String detail = e.getMessage();
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler(EntityInUseException.class)
 	public ResponseEntity<?> treatEntityInUseException(EntityInUseException e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+		HttpStatus status = HttpStatus.CONFLICT;
+		ProblemType problemType = ProblemType.ENTITY_IN_USE;
+		String detail = e.getMessage();
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 	
 	@Override
@@ -39,15 +68,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		if(body == null) {
 			body = Problem.builder()
 					.dateTime(LocalDateTime.now())
-					.message(status.getReasonPhrase())
+					.detail(status.getReasonPhrase())
 					.build();
 		} else if(body instanceof String) {
 			body = Problem.builder()
 					.dateTime(LocalDateTime.now())
-					.message((String) body)
+					.detail((String) body)
 					.build();
 		}
 		
 		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+	
+	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+	    return Problem.builder()
+	            .status(status.value())
+	            .type(problemType.getUri())
+	            .title(problemType.getTitle())
+	            .detail(detail)
+	            .dateTime(LocalDateTime.now());
 	}
 }

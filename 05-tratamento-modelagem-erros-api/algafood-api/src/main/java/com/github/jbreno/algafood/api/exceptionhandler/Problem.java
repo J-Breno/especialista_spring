@@ -10,7 +10,8 @@ import lombok.Getter;
 public class Problem {
 
 	private LocalDateTime dateTime;
-	
-	private String message;
-	
+	private Integer status;
+	private String detail;
+	private String type;
+	private String title;
 }

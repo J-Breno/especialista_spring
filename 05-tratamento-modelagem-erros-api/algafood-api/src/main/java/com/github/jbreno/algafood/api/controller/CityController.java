@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.domain.exception.BusinessException;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
+import com.github.jbreno.algafood.domain.exception.StateNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.service.CityRegistrationService;
 
@@ -43,20 +43,21 @@ public class CityController {
 		try {
 			return cityService.save(city);
 		}
-		catch(EntityNotFoundException e) {
+		catch(StateNotFoundException e) {
 			throw new BusinessException(e.getMessage());
 		}
 	}
 	
 	@PutMapping("/{id}")
 	public City update(@PathVariable Long id,@RequestBody City city) {
-		City currentCity = cityService.searchOrFail(id);
-		
-		BeanUtils.copyProperties(city, currentCity, "id", "paymentsMethod");
 		try {
+			City currentCity = cityService.searchOrFail(id);
+			
+			BeanUtils.copyProperties(city, currentCity, "id", "paymentsMethod");
+			
 			return cityService.save(currentCity);
 		}
-		catch(EntityNotFoundException e) {
+		catch(StateNotFoundException e) {
 			throw new BusinessException(e.getMessage());
 		}
 	}

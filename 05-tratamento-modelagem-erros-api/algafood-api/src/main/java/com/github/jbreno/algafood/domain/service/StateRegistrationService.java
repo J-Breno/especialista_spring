@@ -8,7 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
-import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
+import com.github.jbreno.algafood.domain.exception.StateNotFoundException;
 import com.github.jbreno.algafood.domain.model.State;
 import com.github.jbreno.algafood.domain.repository.StateRepository;
 
@@ -18,9 +18,6 @@ public class StateRegistrationService {
 	private static final String MSG_STATE_IN_USE 
 		= "Estado de código %d não pode ser removida, pois está em uso";
 
-	private static final String MSG_STATE_NOT_FOUND
-		= "Não existe um cadastro de estado com código %d";
-	
 	@Autowired
 	private StateRepository stateRepository;
 	
@@ -37,7 +34,7 @@ public class StateRegistrationService {
 			return stateRepository.save(state);
 		}
 		catch(EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format(MSG_STATE_NOT_FOUND, state.getId()));
+			throw new StateNotFoundException(state.getId());
 		}
 	}
 	
@@ -45,8 +42,7 @@ public class StateRegistrationService {
 		try {
 			stateRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(
-					String.format(MSG_STATE_NOT_FOUND, id));
+			throw new StateNotFoundException(id);
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -56,6 +52,6 @@ public class StateRegistrationService {
 	
 	public State searchOrFail(Long id) {
 		return stateRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException(String.format(MSG_STATE_NOT_FOUND, id)));
+				.orElseThrow(() -> new StateNotFoundException(id));
 	}
 }

@@ -49,7 +49,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		ProblemType problemType = ProblemType.INCOMPREHENSIBLE_MESSAGE;
 		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 				
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(MSG_END_USER_ERROR_MESSAGE).build();
 		return handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
 	}
 	
@@ -76,7 +76,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		ProblemType problemType = ProblemType.INCOMPREHENSIBLE_MESSAGE;
 		String detail = String.format("A propriedade '%s' foi ignorada no tipo %s",
 					path, ex.getReferringClass().getName());
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_END_USER_ERROR_MESSAGE)
+				.build();
 		
 		return  handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
 	}
@@ -103,7 +105,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
 		String detail = e.getMessage();
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
@@ -114,7 +118,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		ProblemType problemType = ProblemType.SYSTEM_ERROR;
 		String detail = String.format(MSG_END_USER_ERROR_MESSAGE);
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
@@ -126,7 +132,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
 		String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", ex.getRequestURL());
 				
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 		return handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
 	}
 	
@@ -137,7 +145,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', que é de um tipo inválido. Corrija e informe o valor compatível com o tipo %s",
 				e.getParameter().getParameterName(), e.getValue(), e.getRequiredType().getSimpleName());
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_END_USER_ERROR_MESSAGE)
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
@@ -149,7 +159,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		ProblemType problemType = ProblemType.ERROR_BUSINESS;
 		String detail = e.getMessage();
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(detail)
+				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}

@@ -16,7 +16,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -37,10 +40,12 @@ public class Restaurant {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotNull
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 	
+//	@DecimalMin("1")
+	@PositiveOrZero
 	@Column(nullable = false)
 	private BigDecimal shippingFee;
 	

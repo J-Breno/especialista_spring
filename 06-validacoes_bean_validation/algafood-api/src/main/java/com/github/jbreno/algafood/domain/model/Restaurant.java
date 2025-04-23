@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,18 +43,19 @@ public class Restaurant {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotBlank(groups = Groups.RestaurantRegistration.class)
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 	
 //	@DecimalMin("1")
-	@PositiveOrZero(groups = Groups.RestaurantRegistration.class)
+	@PositiveOrZero
 	@Column(nullable = false)
 	private BigDecimal shippingFee;
 	
 	
 	@ManyToOne
-	@NotNull(groups = Groups.RestaurantRegistration.class)
+	@NotNull
+	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
 	@Valid
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;

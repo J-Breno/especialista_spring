@@ -14,4 +14,7 @@ public class Problem {
 	private String detail;
 	private String type;
 	private String title;
+	
+	private String userMessage;
+	
 }

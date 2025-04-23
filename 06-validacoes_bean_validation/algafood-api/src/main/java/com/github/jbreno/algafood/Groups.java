@@ -1,0 +1,6 @@
+package com.github.jbreno.algafood;
+
+public interface Groups {
+
+	public interface RestaurantRegistration {}
+}

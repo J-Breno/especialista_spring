@@ -2,6 +2,8 @@ package com.github.jbreno.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +44,7 @@ public class KitchenController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen add(@RequestBody Kitchen kitchen) {
+	public Kitchen add(@RequestBody @Valid Kitchen kitchen) {
 		return kitchenService.save(kitchen);
 	}
 	

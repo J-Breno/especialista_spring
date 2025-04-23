@@ -25,6 +25,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.jbreno.algafood.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,18 +41,18 @@ public class Restaurant {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(groups = Groups.RestaurantRegistration.class)
 	@Column(nullable = false)
 	private String name;
 	
 //	@DecimalMin("1")
-	@PositiveOrZero
+	@PositiveOrZero(groups = Groups.RestaurantRegistration.class)
 	@Column(nullable = false)
 	private BigDecimal shippingFee;
 	
 	
 	@ManyToOne
-	@NotNull
+	@NotNull(groups = Groups.RestaurantRegistration.class)
 	@Valid
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;

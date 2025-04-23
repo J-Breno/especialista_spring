@@ -10,10 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.github.jbreno.algafood.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,11 +28,12 @@ import lombok.EqualsAndHashCode;
 public class Kitchen {
 	
 	@Id	
-	@NotNull
+	@NotNull(groups = Groups.RestaurantRegistration.class)
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 	

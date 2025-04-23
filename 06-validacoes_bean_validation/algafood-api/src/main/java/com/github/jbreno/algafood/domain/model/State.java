@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.github.jbreno.algafood.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +21,12 @@ import lombok.EqualsAndHashCode;
 public class State {
 	
 	@Id
+	@NotNull(groups = Groups.StateId.class)
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 }

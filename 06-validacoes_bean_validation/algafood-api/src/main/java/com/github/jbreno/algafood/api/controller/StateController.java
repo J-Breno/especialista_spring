@@ -2,6 +2,8 @@ package com.github.jbreno.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,14 +39,14 @@ public class StateController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> add(@RequestBody State state) {
+	public ResponseEntity<?> add(@RequestBody @Valid State state) {
 	  state = stateService.save(state);
 	  return ResponseEntity.status(HttpStatus.CREATED)
 			  .body(state);
 	}
 	
 	@PutMapping("/{id}")
-	public State update(@PathVariable Long id,@RequestBody State state) {
+	public State update(@PathVariable Long id,@RequestBody @Valid State state) {
 		State currentState = stateService.searchOrFail(id);
 		
 		BeanUtils.copyProperties(state, currentState, "id");

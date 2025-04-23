@@ -10,7 +10,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -46,13 +45,8 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Restaurant> search(@PathVariable Long id) {
-		Restaurant restaurant = restaurantService.search(id);
-		
-		if(restaurant != null) {
-			return ResponseEntity.ok(restaurant);
-		}
-		return ResponseEntity.notFound().build();
+	public Restaurant search(@PathVariable Long id) {
+		return restaurantService.searchOrFail(id);
 	}
 	
 	@PostMapping

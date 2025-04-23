@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.fasterxml.jackson.databind.exc.IgnoredPropertyException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.EntityNotFoundException;
@@ -31,6 +33,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			return handleInvalidFormatException((InvalidFormatException)rootCause, headers, status, request);
 		}
 		
+		if(rootCause instanceof IgnoredPropertyException) {
+			return handleIgnoredPropertyException((IgnoredPropertyException)rootCause, headers, status, request);
+		}
+		
+		if(rootCause instanceof UnrecognizedPropertyException) {
+			return handleUnrecognizedPropertyException((UnrecognizedPropertyException)rootCause, headers, status, request);
+		}
+		
 		ProblemType problemType = ProblemType.INCOMPREHENSIBLE_MESSAGE;
 		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 				
@@ -38,6 +48,34 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		return handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
 	}
 	
+	private ResponseEntity<Object> handleUnrecognizedPropertyException(UnrecognizedPropertyException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String path = ex.getPath().stream()
+				.map(ref -> ref.getFieldName())
+				.collect(Collectors.joining("."));
+		
+		ProblemType problemType = ProblemType.INCOMPREHENSIBLE_MESSAGE;
+		String detail = String.format("A propriedade '%s' não existe no tipo %s",
+					path, ex.getReferringClass().getName());
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return  handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
+	}
+
+	private ResponseEntity<Object> handleIgnoredPropertyException(IgnoredPropertyException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String path = ex.getPath().stream()
+				.map(ref -> ref.getFieldName())
+				.collect(Collectors.joining("."));
+		
+		ProblemType problemType = ProblemType.INCOMPREHENSIBLE_MESSAGE;
+		String detail = String.format("A propriedade '%s' foi ignorada no tipo %s",
+					path, ex.getReferringClass().getName());
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return  handleExceptionInternal(ex,problem, new HttpHeaders(), status, request);
+	}
+
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String path = ex.getPath().stream()

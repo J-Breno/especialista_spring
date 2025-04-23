@@ -43,7 +43,7 @@ public class Restaurant {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotBlank
+	@NotBlank(message = "Nome é obrigatório")
 	@Column(nullable = false)
 	private String name;
 	

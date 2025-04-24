@@ -1,4 +1,4 @@
-package com.github.jbreno.algafood;
+package com.github.jbreno.algafood.core.validation;
 
 public interface Groups {
 

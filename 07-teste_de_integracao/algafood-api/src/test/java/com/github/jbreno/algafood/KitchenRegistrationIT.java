@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.KitchenNotFoundException;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class KitchenRegistrationTests {
+public class KitchenRegistrationIT {
 	
 	@Autowired
 	private KitchenRegistrationService kitchenService;
@@ -33,13 +34,13 @@ public class KitchenRegistrationTests {
 		assertThat(newKitchen.getId()).isNotNull();
 	}
 
+	@Test(expected = EntityInUseException.class)
+	public void shouldFail_WhenDeleteKitchenInUse() {	
+		kitchenService.remove(1L);
+	}
+	
 	@Test(expected = KitchenNotFoundException.class)
-	public void shouldFailToRegisterKitchen_WhenWithoutName() {
-		Kitchen newKitchen = new Kitchen();
-		newKitchen.setName(null);
-		
-		newKitchen = kitchenService.save(newKitchen);
-		
-		
+	public void shoudFail_WhenKitchenDoesNotExist() {
+		kitchenService.remove(100L);
 	}
 }

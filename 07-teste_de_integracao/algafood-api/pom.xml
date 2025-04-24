@@ -78,6 +78,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<publin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</publin>
 		</plugins>
 	</build>
 

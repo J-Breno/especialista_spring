@@ -1,6 +1,7 @@
 package com.github.jbreno.algafood;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -79,13 +80,36 @@ public class KitchenRegistrationIT {
 			.statusCode(HttpStatus.CREATED.value());
 	}
 	
+	@Test
+	public void shouldReturnResponseAndStatusCorrect_WhenConsultKitchenExists() {
+		given()
+			.pathParam("id", 2)
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{id}")
+		.then()
+			 .statusCode(HttpStatus.OK.value())
+			 .body("name", equalTo("Indiana"));
+	}
+	
+	@Test
+	public void shouldReturnStatus404_WhenConsultKitchenNonExist() {
+		given()
+			.pathParam("id", 100)
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{id}")
+		.then()
+			 .statusCode(HttpStatus.NOT_FOUND.value());
+	}
+	
 	private void prerareData() {
 		Kitchen kitchen1 = new Kitchen();
 		kitchen1.setName("Tailandesa");
 		kitchenRepository.save(kitchen1);
 		
 		Kitchen kitchen2 = new Kitchen();
-		kitchen2.setName("Americana");
+		kitchen2.setName("Indiana");
 		kitchenRepository.save(kitchen2);
 	}
 }

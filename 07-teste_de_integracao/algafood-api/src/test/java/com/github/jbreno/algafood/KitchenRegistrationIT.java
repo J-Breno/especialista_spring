@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
-import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +13,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.github.jbreno.algafood.domain.model.Kitchen;
+import com.github.jbreno.algafood.domain.repository.KitchenRepository;
+import com.github.jbreno.algafood.util.DatabaseCleaner;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -27,7 +30,10 @@ public class KitchenRegistrationIT {
 	private int port;
 	
 	@Autowired
-	private Flyway flyway;
+	private DatabaseCleaner databaseCleaner;
+	
+	@Autowired
+	private KitchenRepository kitchenRepository;
 	
 	@Before
 	public void setUp() {
@@ -35,7 +41,8 @@ public class KitchenRegistrationIT {
 		RestAssured.port = port;
 		RestAssured.basePath = "/kitchens";
 		
-		flyway.migrate();
+		databaseCleaner.clearTables();
+		prerareData();
 	}
 	
 	@Test
@@ -70,5 +77,15 @@ public class KitchenRegistrationIT {
 			.post()
 		.then()
 			.statusCode(HttpStatus.CREATED.value());
+	}
+	
+	private void prerareData() {
+		Kitchen kitchen1 = new Kitchen();
+		kitchen1.setName("Tailandesa");
+		kitchenRepository.save(kitchen1);
+		
+		Kitchen kitchen2 = new Kitchen();
+		kitchen2.setName("Americana");
+		kitchenRepository.save(kitchen2);
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.StateNotFoundException;
@@ -29,6 +30,7 @@ public class StateRegistrationService {
 		return searchOrFail(id);
 	}
 	
+	@Transactional	
 	public State save(State state) {
 		try {
 			return stateRepository.save(state);
@@ -37,7 +39,8 @@ public class StateRegistrationService {
 			throw new StateNotFoundException(state.getId());
 		}
 	}
-	
+
+	@Transactional
 	public void remove (Long id) {
 		try {
 			stateRepository.deleteById(id);

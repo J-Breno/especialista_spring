@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
@@ -33,6 +34,7 @@ public class RestaurantRegistrationService {
 		return searchOrFail(id);
 	}
 	
+	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.searchOrFail(kitchenId);

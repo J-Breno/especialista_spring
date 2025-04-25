@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.jbreno.algafood.domain.exception.CityNotFoundException;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
@@ -35,6 +36,7 @@ public class CityRegistrationService {
 		return city.get();
 	}
 	
+	@Transactional	
 	public City save(City city) {
 		Long stateId = city.getState().getId();
 		State state = stateService.searchOrFail(stateId);
@@ -45,6 +47,7 @@ public class CityRegistrationService {
 	
 	}
 	
+	@Transactional
 	public void remove (Long id) {
 		try {
 			cityRepository.deleteById(id);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.KitchenNotFoundException;
@@ -19,10 +20,12 @@ public class KitchenRegistrationService {
 	@Autowired
 	private KitchenRepository kitchenRepository;
 	
+	@Transactional	
 	public Kitchen save(Kitchen kitchen) {
 		return kitchenRepository.save(kitchen);
 	}
 	
+	@Transactional
 	public void remove (Long id) {
 		try {
 			kitchenRepository.deleteById(id);

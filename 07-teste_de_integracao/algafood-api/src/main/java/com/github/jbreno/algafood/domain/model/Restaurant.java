@@ -26,6 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.jbreno.algafood.core.validation.Groups;
 import com.github.jbreno.algafood.core.validation.ShippingFee;
 
@@ -58,6 +59,7 @@ public class Restaurant {
 	@NotNull
 	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
 	@Valid
+	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 	

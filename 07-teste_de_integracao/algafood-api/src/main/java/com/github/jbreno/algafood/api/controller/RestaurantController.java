@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jbreno.algafood.api.model.RestaurantDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
@@ -46,8 +47,11 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{id}")
-	public Restaurant search(@PathVariable Long id) {
-		return restaurantService.searchOrFail(id);
+	public RestaurantDTO search(@PathVariable Long id) {
+		Restaurant restaurant = restaurantService.searchOrFail(id);
+		RestaurantDTO restaurantDTO = null;
+		
+		return restaurantDTO;
 	}
 	
 	@PostMapping

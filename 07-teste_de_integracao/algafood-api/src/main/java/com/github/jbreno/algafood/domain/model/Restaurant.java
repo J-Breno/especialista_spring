@@ -25,8 +25,6 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.jbreno.algafood.core.validation.Groups;
 import com.github.jbreno.algafood.core.validation.ShippingFee;
 
@@ -48,8 +46,6 @@ public class Restaurant {
 	@Column(nullable = false)
 	private String name;
 	
-//	@DecimalMin("1")
-//	@PositiveOrZero
 	@ShippingFee
 	@Column(nullable = false)
 	private BigDecimal shippingFee;
@@ -59,25 +55,20 @@ public class Restaurant {
 	@NotNull
 	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
 	@Valid
-	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 	
-	@JsonIgnore
 	@Embedded
 	private Address address;
 	
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime registrationDate;
 	
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false,  columnDefinition = "datetime")
 	private LocalDateTime updateDate;
 	
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "tb_restaurant_payment_method",
 			joinColumns = @JoinColumn(name = "restaurant_id"),
@@ -90,6 +81,5 @@ public class Restaurant {
 	    joinColumns = @JoinColumn(name = "restaurant_id"),
 	    inverseJoinColumns = @JoinColumn(name = "product_id")
 	)
-	@JsonIgnore
 	private List<Product> products = new ArrayList<>();
 }

@@ -31,7 +31,6 @@ public class Group {
 	@Column(nullable = false)
 	private String name;
 	
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "tb_group_permission",
 			joinColumns = @JoinColumn(name = "group_id"),

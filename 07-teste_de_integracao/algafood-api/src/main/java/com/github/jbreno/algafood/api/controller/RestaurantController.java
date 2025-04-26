@@ -3,6 +3,7 @@ package com.github.jbreno.algafood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jbreno.algafood.api.model.KitchenDTO;
 import com.github.jbreno.algafood.api.model.RestaurantDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
@@ -42,37 +44,38 @@ public class RestaurantController {
 	
 	
 	@GetMapping
-	public List<Restaurant> list() {
-		return restaurantService.list();
+	public List<RestaurantDTO> list() {
+		return toCollectionDTO(restaurantService.list());
 	}
 	
 	@GetMapping("/{id}")
 	public RestaurantDTO search(@PathVariable Long id) {
 		Restaurant restaurant = restaurantService.searchOrFail(id);
-		RestaurantDTO restaurantDTO = null;
 		
-		return restaurantDTO;
+		return toModel(restaurant);
 	}
+
+	
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant add(@RequestBody @Valid Restaurant restaurant) {
+	public RestaurantDTO add(@RequestBody @Valid Restaurant restaurant) {
 		try {
-			return restaurantService.save(restaurant);
+			return toModel(restaurantService.save(restaurant));
 		}
 		catch(RestaurantNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}	
 	@PutMapping("/{id}")
-	public Restaurant update(@PathVariable Long id,@RequestBody @Valid Restaurant restaurant) {
+	public RestaurantDTO update(@PathVariable Long id,@RequestBody @Valid Restaurant restaurant) {
 		Restaurant currentRestaurant = restaurantService.searchOrFail(id);
 		
 		BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentsMethod", "address", "registrationDate", "products");
 		currentRestaurant = restaurantService.save(currentRestaurant);
 		
 		try {
-			return restaurantService.save(currentRestaurant);
+			return toModel(restaurantService.save(currentRestaurant));
 		}
 		catch(RestaurantNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -117,5 +120,24 @@ public class RestaurantController {
 			Throwable rootCause = ExceptionUtils.getRootCause(e);
 			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequest);
 		}
+	}
+	
+	private RestaurantDTO toModel(Restaurant restaurant) {
+		KitchenDTO kitchenDTO = new KitchenDTO();
+		kitchenDTO.setId(restaurant.getKitchen().getId());
+		kitchenDTO.setName(restaurant.getKitchen().getName());
+		
+		RestaurantDTO restaurantDTO = new RestaurantDTO();
+		restaurantDTO.setId(restaurant.getId());
+		restaurantDTO.setName(restaurant.getName());
+		restaurantDTO.setShippingFee(restaurant.getShippingFee());
+		restaurantDTO.setKitchen(kitchenDTO);
+		return restaurantDTO;
+	}
+	
+	private List<RestaurantDTO> toCollectionDTO(List<Restaurant> restaurants) {
+		return restaurants.stream()
+				.map(restaurant -> toModel(restaurant))
+				.collect(Collectors.toList());
 	}
 }

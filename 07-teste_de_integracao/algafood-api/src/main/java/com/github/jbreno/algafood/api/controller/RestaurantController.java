@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.RestaurantDTOAssembler;
+import com.github.jbreno.algafood.api.assembler.RestaurantInputDisasembler;
 import com.github.jbreno.algafood.api.model.RestaurantDTO;
 import com.github.jbreno.algafood.api.model.input.RestaurantInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
-import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
@@ -35,6 +35,9 @@ public class RestaurantController {
 	
 	@Autowired
 	private RestaurantDTOAssembler restaurantDTOAssembler;
+	
+	@Autowired
+	private RestaurantInputDisasembler restaurantInputDisasembler;
 	
 	
 	@GetMapping
@@ -55,7 +58,7 @@ public class RestaurantController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestaurantDTO add(@RequestBody @Valid RestaurantInputDTO restaurantInput) {
 		try {
-			Restaurant restaurant = toDomainObject(restaurantInput);
+			Restaurant restaurant =  restaurantInputDisasembler.toDomainObject(restaurantInput);
 			return restaurantDTOAssembler.toModel(restaurantService.save(restaurant));
 		}
 		catch(RestaurantNotFoundException e) {
@@ -65,7 +68,7 @@ public class RestaurantController {
 	@PutMapping("/{id}")
 	public RestaurantDTO update(@PathVariable Long id,@RequestBody @Valid RestaurantInputDTO restaurantInputDTO) {
 		try {
-			Restaurant restaurant = toDomainObject(restaurantInputDTO);
+			Restaurant restaurant =  restaurantInputDisasembler.toDomainObject(restaurantInputDTO);
 			Restaurant currentRestaurant = restaurantService.searchOrFail(id);
 			
 			BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentsMethod", "address", "registrationDate", "products");
@@ -83,19 +86,5 @@ public class RestaurantController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remove(@PathVariable Long id) {	
 		restaurantService.remove(id);
-	}
-	
-	
-	
-	private Restaurant toDomainObject(RestaurantInputDTO restaurantInput) {
-		Restaurant restaurant = new Restaurant();
-		restaurant.setName(restaurantInput.getName());
-		restaurant.setShippingFee(restaurantInput.getShippingFee());
-		
-		Kitchen kitchen = new Kitchen();
-		kitchen.setId(restaurantInput.getKitchen().getId());
-		
-		restaurant.setKitchen(kitchen);
-		return restaurant;	
 	}
 }

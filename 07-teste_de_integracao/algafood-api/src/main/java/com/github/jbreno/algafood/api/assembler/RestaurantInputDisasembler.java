@@ -1,22 +1,19 @@
 package com.github.jbreno.algafood.api.assembler;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.jbreno.algafood.api.model.input.RestaurantInputDTO;
-import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 
 @Component
 public class RestaurantInputDisasembler {
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	public Restaurant toDomainObject(RestaurantInputDTO restaurantInput) {
-		Restaurant restaurant = new Restaurant();
-		restaurant.setName(restaurantInput.getName());
-		restaurant.setShippingFee(restaurantInput.getShippingFee());
-		
-		Kitchen kitchen = new Kitchen();
-		kitchen.setId(restaurantInput.getKitchen().getId());
-		
-		restaurant.setKitchen(kitchen);
-		return restaurant;	
+		return modelMapper.map(restaurantInput, Restaurant.class);
 	}
 }

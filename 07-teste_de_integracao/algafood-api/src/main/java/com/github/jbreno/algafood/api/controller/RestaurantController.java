@@ -63,7 +63,8 @@ public class RestaurantController {
 		catch(RestaurantNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-	}	
+	}
+	
 	@PutMapping("/{id}")
 	public RestaurantDTO update(@PathVariable Long id,@RequestBody @Valid RestaurantInputDTO restaurantInputDTO) {
 		try {

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.jbreno.algafood.api.assembler.CityDTOAssembler;
+import com.github.jbreno.algafood.api.assembler.CityInputDisasembler;
+import com.github.jbreno.algafood.api.model.CityDTO;
+import com.github.jbreno.algafood.api.model.input.CityInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.StateNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
@@ -28,6 +31,12 @@ public class CityController {
 	
 	@Autowired
 	private CityRegistrationService cityService;
+	
+	@Autowired
+	private CityDTOAssembler cityDTOAssembler;
+	
+	@Autowired
+	private CityInputDisasembler cityInputDisasembler;
 	
 	@GetMapping
 	public List<City> list() {
@@ -41,9 +50,10 @@ public class CityController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public City add(@RequestBody @Valid City city) {
+	public CityDTO add(@RequestBody @Valid CityInputDTO cityInputDTO) {
 		try {
-			return cityService.save(city);
+			City city =  cityInputDisasembler.toDomainObject(cityInputDTO);
+			return cityDTOAssembler.toModel(cityService.save(city));
 		}
 		catch(StateNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
@@ -51,13 +61,13 @@ public class CityController {
 	}
 	
 	@PutMapping("/{id}")
-	public City update(@PathVariable Long id,@RequestBody @Valid City city) {
+	public CityDTO update(@PathVariable Long id,@RequestBody @Valid CityInputDTO cityInputDTO) {
 		try {
 			City currentCity = cityService.searchOrFail(id);
 			
-			BeanUtils.copyProperties(city, currentCity, "id", "paymentsMethod");
+			cityInputDisasembler.copyToDomainObject(cityInputDTO, currentCity);
 			
-			return cityService.save(currentCity);
+			return cityDTOAssembler.toModel(cityService.save(currentCity));
 		}
 		catch(StateNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);

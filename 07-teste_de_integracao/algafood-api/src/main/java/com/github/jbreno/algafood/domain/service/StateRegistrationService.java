@@ -39,7 +39,7 @@ public class StateRegistrationService {
 			throw new StateNotFoundException(state.getId());
 		}
 	}
-
+	// ALTER TABLE tb_restaurant ADD active tinyint(1) NOT NULL; UPDATE tb_restaurant SET active = true;
 	@Transactional
 	public void remove (Long id) {
 		try {

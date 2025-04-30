@@ -48,6 +48,8 @@ public class Restaurant {
 	@Embedded
 	private Address address;
 	
+	private Boolean active = Boolean.TRUE;
+	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime registrationDate;
@@ -69,4 +71,12 @@ public class Restaurant {
 	    inverseJoinColumns = @JoinColumn(name = "product_id")
 	)
 	private List<Product> products = new ArrayList<>();
+	
+	public void active() {
+		setActive(true);
+	}
+	
+	public void inactivate() {
+		setActive(false);
+	}
 }

@@ -55,6 +55,18 @@ public class RestaurantRegistrationService {
 			throw new EntityInUseException(
 					String.format(MSG_RESTAURANT_IN_USE, id));
 		}
+	}	
+	
+	@Transactional
+	public void active(Long id) {
+		Restaurant currentRestaurant = searchOrFail(id);
+		currentRestaurant.active();
+	}
+	
+	@Transactional
+	public void inactivate(Long id) {
+		Restaurant currentRestaurant = searchOrFail(id);
+		currentRestaurant.inactivate();
 	}
 	
 	public Restaurant searchOrFail(Long id) {

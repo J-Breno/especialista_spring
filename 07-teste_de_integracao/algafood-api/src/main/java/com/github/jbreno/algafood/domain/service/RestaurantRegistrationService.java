@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
+import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.repository.RestaurantRepository;
@@ -26,6 +27,9 @@ public class RestaurantRegistrationService {
 	@Autowired
 	private KitchenRegistrationService kitchenService;
 	
+	@Autowired
+	private CityRegistrationService cityService;
+	
 	public List<Restaurant> list() {
 		return restaurantRepository.findAll();
 	}
@@ -37,9 +41,13 @@ public class RestaurantRegistrationService {
 	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
+		Long cityId = restaurant.getAddress().getCity().getId();
+		
 		Kitchen kitchen = kitchenService.searchOrFail(kitchenId);
+		City city = cityService.searchOrFail(cityId);
 		
 		restaurant.setKitchen(kitchen);
+		restaurant.getAddress().setCity(city);
 		
 		return restaurantRepository.save(restaurant);
 	}

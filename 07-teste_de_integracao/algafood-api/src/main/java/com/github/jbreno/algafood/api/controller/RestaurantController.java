@@ -21,6 +21,7 @@ import com.github.jbreno.algafood.api.assembler.RestaurantInputDisasembler;
 import com.github.jbreno.algafood.api.model.RestaurantDTO;
 import com.github.jbreno.algafood.api.model.input.RestaurantInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
+import com.github.jbreno.algafood.domain.exception.CityNotFoundException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
@@ -74,7 +75,7 @@ public class RestaurantController {
 			
 			return restaurantDTOAssembler.toModel(restaurantService.save(currentRestaurant));
 		}
-		catch(RestaurantNotFoundException e) {
+		catch(RestaurantNotFoundException | CityNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 		

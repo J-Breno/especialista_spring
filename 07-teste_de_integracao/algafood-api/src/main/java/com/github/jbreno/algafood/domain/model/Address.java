@@ -23,7 +23,4 @@ public class Address {
 	@ManyToOne
 	@JoinColumn(name = "address_city_id")
 	private City city;
-	
-	public Address() {
-	}
 }

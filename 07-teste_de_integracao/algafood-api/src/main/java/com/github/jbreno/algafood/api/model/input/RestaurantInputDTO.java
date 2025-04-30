@@ -20,5 +20,9 @@ public class RestaurantInputDTO {
 	private BigDecimal shippingFee;
 	@Valid
 	@NotNull
-	private KitchenInputDTO kitchen;
+	private KitchenIdInput kitchen;
+	
+	@Valid
+	@NotNull
+	private AddressInput address;
 }

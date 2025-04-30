@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.jbreno.algafood.api.model.input.RestaurantInputDTO;
+import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 
@@ -20,6 +21,11 @@ public class RestaurantInputDisasembler {
 	
 	public void copyToDomainObject(RestaurantInputDTO restaurantInputDTO, Restaurant restaurant) {
 		restaurant.setKitchen(new Kitchen());
+		
+		if(restaurant.getAddress() != null) {
+			restaurant.getAddress().setCity(new City());
+		}
+		
 		modelMapper.map(restaurantInputDTO, restaurant);
 	}
 	

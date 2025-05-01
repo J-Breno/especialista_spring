@@ -1,6 +1,9 @@
 package com.github.jbreno.algafood.domain.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.UserNotFoundException;
 import com.github.jbreno.algafood.domain.model.User;
@@ -22,6 +26,9 @@ public class UserRegistrationService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private EntityManager entityManager;
+	
 	public List<User> list() {
 		return userRepository.findAll();
 	}
@@ -32,6 +39,15 @@ public class UserRegistrationService {
 	
 	@Transactional
 	public User save(User user) {
+		entityManager.detach(user);
+		
+		Optional<User> userExist = userRepository.findByEmail(user.getEmail());
+		
+		if(userExist.isPresent() && !userExist.get().equals(user)) {
+			throw new BusinessException(
+					String.format("Já existe usuário cadastrado com o email: %s", user.getEmail()));
+		}
+		
 		return userRepository.save(user);
 	}
 	

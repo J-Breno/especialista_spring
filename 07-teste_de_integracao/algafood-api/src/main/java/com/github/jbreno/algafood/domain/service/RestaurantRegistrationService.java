@@ -12,6 +12,7 @@ import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.Kitchen;
+import com.github.jbreno.algafood.domain.model.PaymentMethod;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.repository.RestaurantRepository;
 
@@ -29,6 +30,9 @@ public class RestaurantRegistrationService {
 	
 	@Autowired
 	private CityRegistrationService cityService;
+	
+	@Autowired
+	private PaymentMethodRegistrationService paymentMethodRegistrationService;
 	
 	public List<Restaurant> list() {
 		return restaurantRepository.findAll();
@@ -75,6 +79,22 @@ public class RestaurantRegistrationService {
 	public void inactivate(Long id) {
 		Restaurant currentRestaurant = searchOrFail(id);
 		currentRestaurant.inactivate();
+	}
+	
+	@Transactional
+	public void desassociatePaymentMethod(Long restaurantId, Long paymentMethodId) {
+		Restaurant restaurant = searchOrFail(restaurantId);
+		PaymentMethod paymentMethod	 = paymentMethodRegistrationService.searchOrFail(paymentMethodId);
+		
+		restaurant.removePaymentMethod(paymentMethod);
+	}
+	
+	@Transactional
+	public void associatePaymentMethod(Long restaurantId, Long paymentMethodId) {
+		Restaurant restaurant = searchOrFail(restaurantId);
+		PaymentMethod paymentMethod	 = paymentMethodRegistrationService.searchOrFail(paymentMethodId);
+		
+		restaurant.addPaymentMethod(paymentMethod);
 	}
 	
 	public Restaurant searchOrFail(Long id) {

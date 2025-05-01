@@ -3,7 +3,9 @@ package com.github.jbreno.algafood.domain.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -62,7 +64,7 @@ public class Restaurant {
 	@JoinTable(name = "tb_restaurant_payment_method",
 			joinColumns = @JoinColumn(name = "restaurant_id"),
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
-	private List<PaymentMethod> paymentsMethod = new ArrayList<>();
+	private Set<PaymentMethod> paymentsMethod = new HashSet<>();
 	
 	@ManyToMany
 	@JoinTable(
@@ -78,5 +80,13 @@ public class Restaurant {
 	
 	public void inactivate() {
 		setActive(false);
+	}
+	
+	public boolean removePaymentMethod(PaymentMethod paymentMethod) {
+		return getPaymentsMethod().remove(paymentMethod);
+	}
+	
+	public boolean addPaymentMethod(PaymentMethod paymentMethod) {
+		return getPaymentsMethod().add(paymentMethod);
 	}
 }

@@ -14,6 +14,7 @@ import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.model.PaymentMethod;
 import com.github.jbreno.algafood.domain.model.Restaurant;
+import com.github.jbreno.algafood.domain.model.User;
 import com.github.jbreno.algafood.domain.repository.RestaurantRepository;
 
 @Service
@@ -33,6 +34,9 @@ public class RestaurantRegistrationService {
 	
 	@Autowired
 	private PaymentMethodRegistrationService paymentMethodRegistrationService;
+	
+	@Autowired
+	private UserRegistrationService userService;
 	
 	public List<Restaurant> list() {
 		return restaurantRepository.findAll();
@@ -107,6 +111,22 @@ public class RestaurantRegistrationService {
 		PaymentMethod paymentMethod	 = paymentMethodRegistrationService.searchOrFail(paymentMethodId);
 		
 		restaurant.addPaymentMethod(paymentMethod);
+	}
+	
+	@Transactional
+	public void desassociateResponsible(Long restaurantId, Long userId) {
+		Restaurant restaurant = searchOrFail(restaurantId);
+		User user	= userService.searchOrFail(userId);
+		
+		restaurant.removeResponsible(user);
+	}
+	
+	@Transactional
+	public void associateResponsible(Long restaurantId, Long userId) {
+		Restaurant restaurant = searchOrFail(restaurantId);
+		User user	= userService.searchOrFail(userId);
+		
+		restaurant.addResponsible(user);
 	}
 	
 	public Restaurant searchOrFail(Long id) {

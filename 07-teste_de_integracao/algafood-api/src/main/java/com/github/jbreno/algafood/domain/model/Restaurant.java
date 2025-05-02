@@ -69,6 +69,12 @@ public class Restaurant {
 	private Set<PaymentMethod> paymentsMethod = new HashSet<>();
 	
 	@ManyToMany
+	@JoinTable(name = "tb_restaurant_user",
+			joinColumns = @JoinColumn(name = "restaurant_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> responsible = new HashSet<>();
+	
+	@ManyToMany
 	@JoinTable(
 	    name = "tb_restaurant_products",
 	    joinColumns = @JoinColumn(name = "restaurant_id"),
@@ -98,5 +104,13 @@ public class Restaurant {
 	
 	public boolean addPaymentMethod(PaymentMethod paymentMethod) {
 		return getPaymentsMethod().add(paymentMethod);
+	}
+	
+	public boolean removeResponsible(User user) {
+		return getResponsible().remove(user);
+	}
+	
+	public boolean addResponsible(User user) {
+		return getResponsible().add(user);
 	}
 }

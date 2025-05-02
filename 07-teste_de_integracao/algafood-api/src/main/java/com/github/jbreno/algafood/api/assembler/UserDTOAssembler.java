@@ -1,5 +1,6 @@
 package com.github.jbreno.algafood.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class UserDTOAssembler {
 		return modelMapper.map(user, UserWithPasswordInputDTO.class);
 	}
 	
-	public List<UserDTO> toCollectionDTO(List<User> users) {
+	public List<UserDTO> toCollectionDTO(Collection<User> users) {
 		return users.stream()
 				.map(user -> toModel(user))
 				.collect(Collectors.toList());

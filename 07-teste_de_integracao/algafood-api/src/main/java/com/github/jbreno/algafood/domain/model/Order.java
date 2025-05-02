@@ -8,12 +8,14 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,25 +44,25 @@ public class Order {
 	private BigDecimal totalValue;
 	
 	@CreationTimestamp
-	@Column(nullable = false, columnDefinition = "datetime")
+	@Column(nullable = false, columnDefinition = "datetime", name = "creation_date")
 	private LocalDateTime dateCreated;
 	
 	private LocalDateTime confirmationDate;
 	
-	private LocalDateTime cancelletionDate;
+	private LocalDateTime cancellationDate;
 	
 	private LocalDateTime deliveryDate;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(nullable = false)
 	private PaymentMethod paymentMethod;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Restaurant restaurant;
 
-	@OneToOne
-	@JoinColumn(nullable = false)
+	@ManyToOne
+	@JoinColumn(nullable = false, name = "user_id")
 	private User client;
 	
 	
@@ -68,9 +70,21 @@ public class Order {
 	@Column(nullable = false)
 	private Address deliveryAddress;
 	
-	@Column(nullable = false)
-	private OrderStatus status;
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status = OrderStatus.CREATING;
 	
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> itens = new ArrayList<>();
+	
+	public void calculateTotalValue() {
+		this.subtotal = getItens().stream()
+				.map(item -> item.getTotalPrice())
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		this.totalValue = this.subtotal.add(this.shippingFee);
+	}
+	
+	public void defineFreight() {
+		setShippingFee(getRestaurant().getShippingFee());
+	}
 }

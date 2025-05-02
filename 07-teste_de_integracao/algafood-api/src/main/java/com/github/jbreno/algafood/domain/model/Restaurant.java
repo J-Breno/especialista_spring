@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -112,5 +113,11 @@ public class Restaurant {
 	
 	public boolean addResponsible(User user) {
 		return getResponsible().add(user);
+	}
+	
+	public Optional<Product> findProductById(Long productId) {
+	    return this.getProducts().stream()
+	        .filter(p -> p.getId().equals(productId))
+	        .findFirst();
 	}
 }

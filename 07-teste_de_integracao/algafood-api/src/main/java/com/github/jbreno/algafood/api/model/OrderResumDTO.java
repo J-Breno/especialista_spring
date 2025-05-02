@@ -16,7 +16,6 @@ public class OrderResumDTO {
 	private BigDecimal shippingFee;
 	private BigDecimal totalValue;
 	private LocalDateTime dateCreated;
-	private LocalDateTime deliveryDate;
 	private RestaurantResumDTO restaurant;
 	private UserDTO client;
 	private OrderStatus status;

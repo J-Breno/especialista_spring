@@ -25,71 +25,88 @@ import com.github.jbreno.algafood.api.model.input.OrderInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.OrderNotFoundException;
 import com.github.jbreno.algafood.domain.model.Order;
+import com.github.jbreno.algafood.domain.model.Restaurant;
+import com.github.jbreno.algafood.domain.model.User;
+import com.github.jbreno.algafood.domain.service.IssuanceOrderService;
 import com.github.jbreno.algafood.domain.service.OrderRegistrationService;
+import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
+import com.github.jbreno.algafood.domain.service.UserRegistrationService;
 
 @RestController
 @RequestMapping(value = "/orders")
 public class OrderController {
-	
+
 	@Autowired
 	private OrderRegistrationService orderService;
-	
+
+	@Autowired
+	private UserRegistrationService userService;
+
+	@Autowired
+	private RestaurantRegistrationService restaurantService;
+
 	@Autowired
 	private OrderDTOAssembler orderDTOAssembler;
-	
+
 	@Autowired
 	private OrderResumDTOAssembler orderResumDTOAssembler;
-	
+
 	@Autowired
 	private OrderInputDisasembler orderInputDisasembler;
-	
-	
+
+	@Autowired
+	private IssuanceOrderService issuanceOrder;
+
 	@GetMapping
 	public List<OrderResumDTO> list() {
 		return orderResumDTOAssembler.toCollectionDTO(orderService.list());
 	}
-	
+
 	@GetMapping("/{id}")
 	public OrderDTO search(@PathVariable Long id) {
 		Order order = orderService.searchOrFail(id);
-		
+
 		return orderDTOAssembler.toModel(order);
 	}
 
-	
-	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public OrderDTO add(@RequestBody @Valid OrderInputDTO orderInput) {
 		try {
-			Order order =  orderInputDisasembler.toDomainObject(orderInput);
-			return orderDTOAssembler.toModel(orderService.save(order));
-		}
-		catch(OrderNotFoundException e) {
+			Order order = orderInputDisasembler.toDomainObject(orderInput);
+
+			User client = userService.searchOrFail(1L);
+			Restaurant restaurant = restaurantService.searchOrFail(order.getRestaurant().getId());
+
+			order.setClient(client);
+			order.setRestaurant(restaurant);
+
+			order = issuanceOrder.issue(order);
+
+			return orderDTOAssembler.toModel(order);
+		} catch (OrderNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
 	}
-	
+
 	@PutMapping("/{id}")
-	public OrderDTO update(@PathVariable Long id,@RequestBody @Valid OrderInputDTO OrderInputDTO) {
+	public OrderDTO update(@PathVariable Long id, @RequestBody @Valid OrderInputDTO OrderInputDTO) {
 		try {
 			Order currentOrder = orderService.searchOrFail(id);
-			
+
 			orderInputDisasembler.copyToDomainObject(OrderInputDTO, currentOrder);
-			
+
 			return orderDTOAssembler.toModel(orderService.save(currentOrder));
-		}
-		catch(OrderNotFoundException e) {
+		} catch (OrderNotFoundException e) {
 			throw new BusinessException(e.getMessage(), e);
 		}
-		
+
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remove(@PathVariable Long id) {	
+	public void remove(@PathVariable Long id) {
 		orderService.remove(id);
 	}
-	
-	
+
 }

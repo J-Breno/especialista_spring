@@ -25,20 +25,28 @@ public class OrderItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
-	
+
 	@Column(nullable = false)
 	private Integer quantity;
 	@Column(nullable = false)
 	private BigDecimal unitPrice;
 	@Column(nullable = false)
 	private BigDecimal totalPrice;
-	
+
 	private String observation;
-	
+
 	@OneToOne
 	private Product product;
-	
+
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Order order;
+
+	public void calculateTotalValue() {
+		if (quantity != null && unitPrice != null) {
+			this.totalPrice = unitPrice.multiply(new BigDecimal(quantity));
+		} else {
+			this.totalPrice = BigDecimal.ZERO;
+		}
+	}
 }

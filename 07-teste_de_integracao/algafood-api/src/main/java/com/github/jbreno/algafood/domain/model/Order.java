@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -74,17 +75,26 @@ public class Order {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status = OrderStatus.CREATING;
 	
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> itens = new ArrayList<>();
 	
 	public void calculateTotalValue() {
-		this.subtotal = getItens().stream()
-				.map(item -> item.getTotalPrice())
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
-		
-		this.totalValue = this.subtotal.add(this.shippingFee);
-	}
-	
+	    if (this.itens == null) {
+	        this.itens = new ArrayList<>();
+	    }
+
+	    this.itens.forEach(OrderItem::calculateTotalValue);
+
+	    this.subtotal = this.itens.stream()
+	            .map(item -> item.getTotalPrice() != null ? item.getTotalPrice() : BigDecimal.ZERO)
+	            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+	    if (this.shippingFee == null) {
+	        this.shippingFee = BigDecimal.ZERO;
+	    }
+
+	    this.totalValue = this.subtotal.add(this.shippingFee);
+	}	
 	public void defineFreight() {
 		setShippingFee(getRestaurant().getShippingFee());
 	}

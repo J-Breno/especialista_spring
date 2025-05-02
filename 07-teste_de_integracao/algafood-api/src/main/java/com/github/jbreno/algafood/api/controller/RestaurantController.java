@@ -98,4 +98,16 @@ public class RestaurantController {
 	public void inactivate(@PathVariable Long id) {
 		restaurantService.inactivate(id);
 	}
+	
+	@PutMapping("/{id}/opening")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void open(@PathVariable Long id) {
+		restaurantService.open(id);
+	}
+	
+	@PutMapping("/{id}/closing")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void closing(@PathVariable Long id) {
+		restaurantService.close(id);
+	}
 }

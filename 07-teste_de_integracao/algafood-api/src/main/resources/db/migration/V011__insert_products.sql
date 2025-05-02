@@ -34,6 +34,8 @@ ALTER TABLE tb_product DROP FOREIGN KEY fk_tb_product_restaurant;
 ALTER TABLE tb_product DROP INDEX fk_tb_product_restaurant;
 ALTER TABLE tb_product DROP COLUMN restaurant_id;
 
+ALTER TABLE tb_restaurant ADD COLUMN open BOOLEAN NOT NULL DEFAULT TRUE;
+
 CREATE TABLE IF NOT EXISTS tb_restaurant_products (
     restaurant_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
@@ -55,11 +57,11 @@ INSERT INTO tb_city(id, name, state_id) VALUES(3, 'Fortaleza', 3);
 INSERT INTO tb_city(id, name, state_id) VALUES(4, 'São Paulo', 2);
 INSERT INTO tb_city(id, name, state_id) VALUES(5, 'Campinas', 2);
 
-INSERT INTO tb_restaurant(id, name, shipping_fee, kitchen_id, registration_date, update_date, active, address_city_id, address_cep, address_street, address_number, address_neighborhood, address_complement) 
+INSERT INTO tb_restaurant(id, name, shipping_fee, kitchen_id, registration_date, update_date, active, open, address_city_id, address_cep, address_street, address_number, address_neighborhood, address_complement) 
 VALUES
-(1, 'Thai Gourmet', 10, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, 1, '38499-00', 'Rua João Pìnheiro', '1000', 'Centro', 'Perto dali'),
-(2, 'Thai Delivery', 9.50, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, 1, '38455-00', 'Rua Padre Pìnheiro', '1623', 'Aldeota', 'Perto de cá'),
-(3, 'Tuk Tuk Comida Indiana', 15, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, 1, '32699-00', 'Rua João Moura', '1712', 'Meireles', 'Perto de lá');
+(1, 'Thai Gourmet', 10, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, true, 1, '38499-00', 'Rua João Pìnheiro', '1000', 'Centro', 'Perto dali'),
+(2, 'Thai Delivery', 9.50, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, false, 1, '38455-00', 'Rua Padre Pìnheiro', '1623', 'Aldeota', 'Perto de cá'),
+(3, 'Tuk Tuk Comida Indiana', 15, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP(), true, true, 1, '32699-00', 'Rua João Moura', '1712', 'Meireles', 'Perto de lá');
 
 INSERT INTO tb_product(id, name, description, price, active) 
 VALUES
@@ -67,7 +69,6 @@ VALUES
 (2, 'Pizza', 'Pizza de Calabresa', 50.3, true),
 (3, 'Pizza', 'Pizza de Chocolate', 50.3, true);
 
--- Associações entre restaurantes e produtos
 INSERT INTO tb_restaurant_products(restaurant_id, product_id) 
 VALUES
 (1, 1),

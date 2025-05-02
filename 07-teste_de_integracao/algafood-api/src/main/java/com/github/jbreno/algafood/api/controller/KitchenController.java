@@ -21,7 +21,6 @@ import com.github.jbreno.algafood.api.assembler.KitchenInputDisasembler;
 import com.github.jbreno.algafood.api.model.KitchenDTO;
 import com.github.jbreno.algafood.api.model.input.KitchenInputDTO;
 import com.github.jbreno.algafood.domain.model.Kitchen;
-import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
 
 
@@ -29,8 +28,6 @@ import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
 @RequestMapping(value = "/kitchens")
 public class KitchenController {
 	
-	@Autowired
-	private KitchenRepository kitchenRepository;
 	
 	@Autowired
 	private KitchenRegistrationService kitchenService;
@@ -42,13 +39,14 @@ public class KitchenController {
 	private KitchenDTOAssembler kitchenDTOAssembler;
 	
 	@GetMapping
-	public List<Kitchen> list() {
-		return kitchenRepository.findAll();
+	public List<KitchenDTO> list() {
+		return kitchenDTOAssembler.toCollectionDTO(kitchenService.list());
 	}
 	
 	@GetMapping("/{id}")
-	public Kitchen search(@PathVariable Long id) {
-		return kitchenService.searchOrFail(id);
+	public KitchenDTO search(@PathVariable Long id) {
+		Kitchen kitchen = kitchenService.searchOrFail(id);
+		return kitchenDTOAssembler.toModel(kitchen);
 	}
 	
 	@PostMapping

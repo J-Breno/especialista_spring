@@ -1,5 +1,7 @@
 package com.github.jbreno.algafood.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,6 +21,10 @@ public class KitchenRegistrationService {
 	
 	@Autowired
 	private KitchenRepository kitchenRepository;
+	
+	public List<Kitchen> list() {
+		return kitchenRepository.findAll();
+	}
 	
 	@Transactional	
 	public Kitchen save(Kitchen kitchen) {

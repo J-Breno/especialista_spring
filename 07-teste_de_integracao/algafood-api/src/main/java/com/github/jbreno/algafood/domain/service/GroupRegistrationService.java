@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.GroupNotFoundException;
 import com.github.jbreno.algafood.domain.model.Group;
+import com.github.jbreno.algafood.domain.model.Permission;
 import com.github.jbreno.algafood.domain.repository.GroupRepository;
 
 @Service
@@ -21,6 +22,9 @@ public class GroupRegistrationService {
 	
 	@Autowired
 	private GroupRepository groupRepository;
+	
+	@Autowired
+	private PermissionRegistrationService permissionService;
 	
 	public List<Group> list() {
 		return groupRepository.findAll();
@@ -47,6 +51,23 @@ public class GroupRegistrationService {
 					String.format(MSG_GROUP_IN_USE, id));
 		}
 	}	
+	
+	@Transactional
+	public void desassociatePermission(Long groupId, Long permissionId) {
+		Group group = searchOrFail(groupId);
+		Permission permission = permissionService.searchOrFail(permissionId);
+		
+		group.removePermission(permission);
+	}
+	
+	@Transactional
+	public void associatePermission(Long groupId, Long permissionId) {
+		Group group = searchOrFail(groupId);
+		Permission permission = permissionService.searchOrFail(permissionId);
+		
+		group.addPermission(permission);
+	}
+	
 	
 	public Group searchOrFail(Long id) {
 		return groupRepository.findById(id)

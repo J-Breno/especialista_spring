@@ -30,13 +30,19 @@ ALTER TABLE tb_order AUTO_INCREMENT = 1;
 ALTER TABLE tb_product AUTO_INCREMENT = 1;
 ALTER TABLE tb_order_item AUTO_INCREMENT = 1;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
 ALTER TABLE tb_product DROP FOREIGN KEY fk_tb_product_restaurant;
 ALTER TABLE tb_product DROP INDEX fk_tb_product_restaurant;
 ALTER TABLE tb_product DROP COLUMN restaurant_id;
 
+SET FOREIGN_KEY_CHECKS = 1;
+
 ALTER TABLE tb_restaurant ADD COLUMN open BOOLEAN NOT NULL DEFAULT TRUE;
 
-CREATE TABLE IF NOT EXISTS tb_restaurant_products (
+DROP TABLE IF EXISTS tb_restaurant_products;
+
+CREATE TABLE tb_restaurant_products (
     restaurant_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     PRIMARY KEY (restaurant_id, product_id),
@@ -100,6 +106,23 @@ VALUES
 (2, 'Vendedor'), 
 (3, 'Secretária'), 
 (4, 'Cadastrador');
+
+DROP TABLE IF EXISTS tb_group_permission;
+
+CREATE TABLE tb_group_permission (
+    group_id BIGINT NOT NULL,
+    permission_id BIGINT NOT NULL,
+    PRIMARY KEY (group_id, permission_id),
+    FOREIGN KEY (group_id) REFERENCES tb_group(id),
+    FOREIGN KEY (permission_id) REFERENCES tb_permission(id)
+);
+
+INSERT INTO tb_group_permission(group_id, permission_id) 
+VALUES
+(1, 1),
+(1, 2), 
+(2, 1), 
+(4, 1); 
 
 INSERT INTO tb_user(id, name, email, password, registration_date) 
 VALUES

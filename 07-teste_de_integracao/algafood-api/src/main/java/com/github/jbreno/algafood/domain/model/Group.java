@@ -1,6 +1,7 @@
 package com.github.jbreno.algafood.domain.model;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,14 @@ public class Group {
 	@ManyToMany
 	@JoinTable(name = "tb_group_permission",
 			joinColumns = @JoinColumn(name = "group_id"),
-			inverseJoinColumns = @JoinColumn(name = "permision_id"))
-	private List<Permission> permissions;
+			inverseJoinColumns = @JoinColumn(name = "permission_id"))
+	private Set<Permission> permissions = new HashSet<>();
+	
+	public boolean removePermission(Permission permission) {
+		return getPermissions().remove(permission);
+	}
+	
+	public boolean addPermission(Permission permission) {
+		return getPermissions().add(permission);
+	}
 }

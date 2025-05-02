@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.OrderDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.OrderInputDisasembler;
+import com.github.jbreno.algafood.api.assembler.OrderResumDTOAssembler;
 import com.github.jbreno.algafood.api.model.OrderDTO;
+import com.github.jbreno.algafood.api.model.OrderResumDTO;
 import com.github.jbreno.algafood.api.model.input.OrderInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.OrderNotFoundException;
@@ -36,12 +38,15 @@ public class OrderController {
 	private OrderDTOAssembler orderDTOAssembler;
 	
 	@Autowired
+	private OrderResumDTOAssembler orderResumDTOAssembler;
+	
+	@Autowired
 	private OrderInputDisasembler orderInputDisasembler;
 	
 	
 	@GetMapping
-	public List<OrderDTO> list() {
-		return orderDTOAssembler.toCollectionDTO(orderService.list());
+	public List<OrderResumDTO> list() {
+		return orderResumDTOAssembler.toCollectionDTO(orderService.list());
 	}
 	
 	@GetMapping("/{id}")

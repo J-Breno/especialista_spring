@@ -86,6 +86,16 @@ public class RestaurantRegistrationService {
 	}
 	
 	@Transactional
+	public void active(List<Long> ids) {
+		ids.forEach(this::active);
+	}
+	
+	@Transactional
+	public void inactivate(List<Long> ids) {
+		ids.forEach(this::inactivate);
+	}
+	
+	@Transactional
 	public void open(Long id) {
 		Restaurant currentRestaurant = searchOrFail(id);
 		currentRestaurant.open();

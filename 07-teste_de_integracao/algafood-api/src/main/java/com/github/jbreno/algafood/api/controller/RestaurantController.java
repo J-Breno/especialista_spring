@@ -99,6 +99,26 @@ public class RestaurantController {
 		restaurantService.inactivate(id);
 	}
 	
+	@PutMapping("/activations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void activeMultiple(@RequestBody List<Long> ids) {
+		try {
+			restaurantService.active(ids);
+		} catch (RestaurantNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+	
+	@DeleteMapping("/desactivations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void desactiveMultiple(@RequestBody List<Long> ids) {
+		try {
+			restaurantService.inactivate(ids);
+		} catch (RestaurantNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
+		}
+	}
+	
 	@PutMapping("/{id}/opening")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void open(@PathVariable Long id) {

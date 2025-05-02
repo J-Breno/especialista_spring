@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.EntityInUseException;
 import com.github.jbreno.algafood.domain.exception.UserNotFoundException;
+import com.github.jbreno.algafood.domain.model.Group;
 import com.github.jbreno.algafood.domain.model.User;
 import com.github.jbreno.algafood.domain.repository.UserRepository;
 
@@ -25,6 +26,9 @@ public class UserRegistrationService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private GroupRegistrationService groupService;
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -63,6 +67,22 @@ public class UserRegistrationService {
 					String.format(MSG_USER_IN_USE, id));
 		}
 	}	
+	
+	@Transactional
+	public void desassociateGroup(Long userId, Long groupId) {
+		User user = searchOrFail(userId);
+		Group group = groupService.searchOrFail(groupId);
+		
+		user.removeGroup(group);
+	}
+	
+	@Transactional
+	public void associateGroup(Long userId, Long groupId) {
+		User user = searchOrFail(userId);
+		Group group = groupService.searchOrFail(groupId);
+		
+		user.addGroup(group);
+	}
 	
 	public User searchOrFail(Long id) {
 		return userRepository.findById(id)

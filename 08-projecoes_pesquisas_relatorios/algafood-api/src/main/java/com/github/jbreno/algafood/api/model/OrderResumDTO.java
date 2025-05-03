@@ -3,11 +3,13 @@ package com.github.jbreno.algafood.api.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.github.jbreno.algafood.domain.model.OrderStatus;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonFilter("orderFilter")
 @Setter
 @Getter
 public class OrderResumDTO {

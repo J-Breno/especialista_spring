@@ -53,41 +53,6 @@ public class RestaurantController {
 		return list();
 	}
 	
-//	@GetMapping
-//	public MappingJacksonValue list(@RequestParam(required = false) String projections) {
-//		List<Restaurant> restaurants = restaurantRepository.findAll();
-//		List<RestaurantDTO> restaurantsModel = restaurantDTOAssembler.toCollectionDTO(restaurants);
-//		
-//		MappingJacksonValue restaurantWrapper = new MappingJacksonValue(restaurantsModel);
-//		
-//		restaurantWrapper.setSerializationView(RestaurantView.Resum.class);
-//		
-//		if("name-only".equals(projections)) {
-//			restaurantWrapper.setSerializationView(RestaurantView.NameOnly.class);
-//		} else if("complet".equals(projections)) {
-//			restaurantWrapper.setSerializationView(null);
-//		}
-//		
-//		return restaurantWrapper;
-//	}
-	
-//	@GetMapping
-//	public List<RestaurantDTO> list() {
-//		return restaurantDTOAssembler.toCollectionDTO(restaurantService.list());
-//	}
-//	
-//	@JsonView(RestaurantView.Resum.class)
-//	@GetMapping(params = "projection=resum")
-//	public List<RestaurantDTO> listResum() {
-//		return list();
-//	}
-//	
-//	@JsonView(RestaurantView.NameOnly.class)
-//	@GetMapping(params = "projection=name-only")
-//	public List<RestaurantDTO> listNameOnly() {
-//		return list();
-//	}
-	
 	@GetMapping("/{id}")
 	public RestaurantDTO search(@PathVariable Long id) {
 		Restaurant restaurant = restaurantService.searchOrFail(id);

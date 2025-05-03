@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,10 @@ import com.github.jbreno.algafood.api.model.input.ProductInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.ProductNotFoundException;
 import com.github.jbreno.algafood.domain.model.Product;
+import com.github.jbreno.algafood.domain.model.Restaurant;
+import com.github.jbreno.algafood.domain.repository.ProductRepository;
 import com.github.jbreno.algafood.domain.service.ProductRegistrationService;
+import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/products")
@@ -33,6 +37,12 @@ public class ProductController {
 	private ProductRegistrationService productService;
 	
 	@Autowired
+	private ProductRepository productRepository;
+	
+	@Autowired
+	private RestaurantRegistrationService restaurantService;
+	
+	@Autowired
 	private ProductDTOAssembler productDTOAssembler;
 	
 	@Autowired
@@ -40,8 +50,16 @@ public class ProductController {
 	
 	
 	@GetMapping
-	public List<ProductDTO> list(@PathVariable Long restaurantId) {
-		return productDTOAssembler.toCollectionDTO(productService.list(restaurantId));
+	public List<ProductDTO> list(@PathVariable Long restaurantId, @RequestParam(required = false) boolean includeInactive) {
+		Restaurant restaurant = restaurantService.searchOrFail(restaurantId);
+		List<Product> allProducts = null;
+		if(includeInactive) {
+			allProducts = productRepository.findAllByRestaurants(restaurant);
+		} else {
+			 allProducts = productRepository.findActiveByRestaurant(restaurant);
+		}
+		
+		return productDTOAssembler.toCollectionDTO(allProducts);
 	}
 	
 	@GetMapping("/{id}")

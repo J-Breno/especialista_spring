@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.github.jbreno.algafood.domain.model.Product;
+import com.github.jbreno.algafood.domain.model.Restaurant;
 
 public interface ProductRepository extends JpaRepository<Product, Long>{
 	@Query("SELECT p FROM Product p JOIN p.restaurants r WHERE r.id = :restaurantId")
@@ -19,6 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
         @Param("restaurantId") Long restaurantId
     );
     
-    @Query("SELECT p FROM Product p JOIN p.restaurants r WHERE r.id = :restaurantId")
-    List<Product> findByRestaurantId(@Param("restaurantId") Long restaurantId);
+    List<Product> findAllByRestaurants(Restaurant restaurant);
+    
+    @Query("from Product p WHERE p.active = true AND p.restaurants = :restaurant")
+    List<Product> findActiveByRestaurant(Restaurant restaurant);
 }

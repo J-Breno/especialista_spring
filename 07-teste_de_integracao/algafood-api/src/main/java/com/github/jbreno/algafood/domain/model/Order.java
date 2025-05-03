@@ -1,7 +1,6 @@
 package com.github.jbreno.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.github.jbreno.algafood.domain.exception.BusinessException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,13 +49,13 @@ public class Order {
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime", name = "creation_date")
-	private LocalDateTime dateCreated;
+	private OffsetDateTime dateCreated;
 	
 	private OffsetDateTime confirmationDate;
 	
-	private LocalDateTime cancellationDate;
+	private OffsetDateTime cancellationDate;
 	
-	private LocalDateTime deliveryDate;
+	private OffsetDateTime deliveryDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
@@ -98,5 +99,30 @@ public class Order {
 	}	
 	public void defineFreight() {
 		setShippingFee(getRestaurant().getShippingFee());
+	}
+	
+	public void confirm() {
+		setStatus(OrderStatus.CONFIRMED);
+		setConfirmationDate(OffsetDateTime.now());
+	}
+	
+	public void delivered() {
+		setStatus(OrderStatus.DELIVERED);
+		setDeliveryDate(OffsetDateTime.now());
+	}
+	
+	public void canceled() {
+		setStatus(OrderStatus.CANCELED);
+		setCancellationDate(OffsetDateTime.now());
+	}
+	
+	private void setStatus(OrderStatus newStatus) {
+		if(getStatus().cannnotChangeTo(newStatus)) {
+			throw new BusinessException(
+					String.format("Status do pedido %d não pode ser alterado de %s para %s", 
+							getId(), getStatus().getDescription(), newStatus.getDescription()));
+		}
+		
+		this.status = newStatus;
 	}
 }

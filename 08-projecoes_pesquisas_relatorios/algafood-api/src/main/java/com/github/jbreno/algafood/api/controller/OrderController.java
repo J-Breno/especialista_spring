@@ -24,9 +24,12 @@ import com.github.jbreno.algafood.api.model.OrderResumDTO;
 import com.github.jbreno.algafood.api.model.input.OrderInputDTO;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.OrderNotFoundException;
+import com.github.jbreno.algafood.domain.infrastructure.repository.spec.OrderSpecs;
 import com.github.jbreno.algafood.domain.model.Order;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.model.User;
+import com.github.jbreno.algafood.domain.repository.OrderRepository;
+import com.github.jbreno.algafood.domain.repository.filter.OrderFilter;
 import com.github.jbreno.algafood.domain.service.IssuanceOrderService;
 import com.github.jbreno.algafood.domain.service.OrderRegistrationService;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
@@ -57,10 +60,15 @@ public class OrderController {
 
 	@Autowired
 	private IssuanceOrderService issuanceOrder;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 
 	@GetMapping
-	public List<OrderResumDTO> list() {
-		return orderResumDTOAssembler.toCollectionDTO(orderService.list());
+	public List<OrderResumDTO> search(OrderFilter orderFilter) {
+		List<Order> allOrders = orderRepository.findAll(OrderSpecs.usingFilter(orderFilter));
+		
+		return orderResumDTOAssembler.toCollectionDTO(allOrders);
 	}
 
 //	@GetMapping

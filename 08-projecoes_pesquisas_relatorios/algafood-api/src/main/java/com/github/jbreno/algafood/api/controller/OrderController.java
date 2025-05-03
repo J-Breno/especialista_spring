@@ -26,6 +26,7 @@ import com.github.jbreno.algafood.api.assembler.OrderResumDTOAssembler;
 import com.github.jbreno.algafood.api.model.OrderDTO;
 import com.github.jbreno.algafood.api.model.OrderResumDTO;
 import com.github.jbreno.algafood.api.model.input.OrderInputDTO;
+import com.github.jbreno.algafood.core.data.PageableTranslator;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.OrderNotFoundException;
 import com.github.jbreno.algafood.domain.infrastructure.repository.spec.OrderSpecs;
@@ -38,6 +39,7 @@ import com.github.jbreno.algafood.domain.service.IssuanceOrderService;
 import com.github.jbreno.algafood.domain.service.OrderRegistrationService;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 import com.github.jbreno.algafood.domain.service.UserRegistrationService;
+import com.google.common.collect.ImmutableMap;
 
 
 @RestController
@@ -70,6 +72,7 @@ public class OrderController {
 
 	@GetMapping
 	public Page<OrderResumDTO> search(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
+		pageable = translatePageable(pageable);
 		Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(orderFilter), pageable);
 		
 		List<OrderResumDTO> ordersResumDto = orderResumDTOAssembler.toCollectionDTO(ordersPage.getContent());
@@ -79,25 +82,7 @@ public class OrderController {
 		return ordersResumDtoPage;
 	}
 
-//	@GetMapping
-//	public MappingJacksonValue list(@RequestParam(required = false) String camps) {
-//		List<Order> orders = orderService.list();
-//		List<OrderResumDTO> orderDto =  orderResumDTOAssembler.toCollectionDTO(orders);
-//		
-//		MappingJacksonValue ordersWrapper = new MappingJacksonValue(orderDto);
-//		
-//		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-//		filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
-//		
-//		if(StringUtils.isNotBlank(camps)) {
-//			filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(camps.split(",")));
-//		}
-//			
-//		ordersWrapper.setFilters(filterProvider);
-//		
-//		return ordersWrapper;
-//	}
-	
+
 	@GetMapping("/{code}")
 	public OrderDTO search(@PathVariable String code) {
 		Order order = issuanceOrder.searchOrFail(code);
@@ -145,4 +130,12 @@ public class OrderController {
 		orderService.remove(id);
 	}
 
+	private Pageable translatePageable(Pageable pageable)  {
+		var mapping = ImmutableMap.of(
+				"code", "code",
+				"restaurant.name", "restaurant.name",
+				"totalValue", "totalValue");
+				
+		return PageableTranslator.translate(pageable, mapping);
+	}
 }

@@ -11,8 +11,10 @@ import javax.persistence.criteria.Predicate;
 public class OrderSpecs {
 	public static Specification<Order> usingFilter(OrderFilter filter) {
 		return (root, query, builder) -> {
-			root.fetch("restaurant").fetch("kitchen");
-			root.fetch("client");
+			if(Order.class.equals(query.getResultType())) {
+				root.fetch("restaurant").fetch("kitchen");
+				root.fetch("client");
+			}
 			var predicates = new ArrayList<Predicate>();
 			
 			if(filter.getClientId() != null) {

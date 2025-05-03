@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,10 +69,14 @@ public class OrderController {
 	private OrderRepository orderRepository;
 
 	@GetMapping
-	public List<OrderResumDTO> search(OrderFilter orderFilter) {
-		List<Order> allOrders = orderRepository.findAll(OrderSpecs.usingFilter(orderFilter));
+	public Page<OrderResumDTO> search(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
+		Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(orderFilter), pageable);
 		
-		return orderResumDTOAssembler.toCollectionDTO(allOrders);
+		List<OrderResumDTO> ordersResumDto = orderResumDTOAssembler.toCollectionDTO(ordersPage.getContent());
+		
+		Page<OrderResumDTO> ordersResumDtoPage = new PageImpl<>(ordersResumDto, pageable, ordersPage.getTotalElements());
+		
+		return ordersResumDtoPage;
 	}
 
 //	@GetMapping

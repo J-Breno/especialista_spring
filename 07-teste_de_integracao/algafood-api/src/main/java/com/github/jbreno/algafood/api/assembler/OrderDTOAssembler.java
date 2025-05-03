@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.github.jbreno.algafood.api.model.OrderDTO;
+import com.github.jbreno.algafood.api.model.PaymentMethodDTO;
 import com.github.jbreno.algafood.domain.model.Order;
 @Component
 public class OrderDTOAssembler {
@@ -15,7 +16,12 @@ public class OrderDTOAssembler {
 	private ModelMapper modelMapper;
 	
 	public OrderDTO toModel(Order order) {
-		return modelMapper.map(order, OrderDTO.class);
+		 OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
+
+	        PaymentMethodDTO paymentMethodDTO = modelMapper.map(order.getPaymentMethod(), PaymentMethodDTO.class);
+	        orderDTO.setPaymentMethod(paymentMethodDTO);
+
+	        return orderDTO;
 	}
 	
 	public List<OrderDTO> toCollectionDTO(List<Order> orders) {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.jbreno.algafood.domain.exception.BusinessException;
+import com.github.jbreno.algafood.domain.exception.OrderNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.model.Order;
 import com.github.jbreno.algafood.domain.model.PaymentMethod;
@@ -63,6 +64,11 @@ public class IssuanceOrderService {
 		User user = userService.searchOrFail(order.getClient().getId());
 		Restaurant restaurant = restaurantService.searchOrFail(order.getRestaurant().getId());
 		PaymentMethod paymentMethod = paymentMethodService.searchOrFail(order.getPaymentMethod().getId());
+		
+		order.getDeliveryAddress().setCity(city);
+		order.setClient(user);
+		order.setRestaurant(restaurant);
+		order.setPaymentMethod(paymentMethod);
 	}
 
 	private void validateItens(Order order) {
@@ -79,5 +85,10 @@ public class IssuanceOrderService {
 			item.setProduct(product);
 			item.setUnitPrice(product.getPrice());
 		});
+	}
+	
+	public Order searchOrFail(Long id) {
+		return orderRepository.findById(id)
+				.orElseThrow(() -> new OrderNotFoundException(id));
 	}
 }

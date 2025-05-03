@@ -2,6 +2,7 @@ package com.github.jbreno.algafood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class Order {
 	@Column(nullable = false, columnDefinition = "datetime", name = "creation_date")
 	private LocalDateTime dateCreated;
 	
-	private LocalDateTime confirmationDate;
+	private OffsetDateTime confirmationDate;
 	
 	private LocalDateTime cancellationDate;
 	

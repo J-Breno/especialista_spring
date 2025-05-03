@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.github.jbreno.algafood.domain.model.OrderStatus;
-import com.github.jbreno.algafood.domain.model.PaymentMethod;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,7 @@ public class OrderDTO {
 	private LocalDateTime confirmationDate;
 	private LocalDateTime cancelletionDate;
 	private LocalDateTime deliveryDate;
-	private PaymentMethod paymentMethod;
+	private PaymentMethodDTO paymentMethod;
 	private RestaurantResumDTO restaurant;
 	private UserDTO client;
 	private AddressDTO deliveryAddress;

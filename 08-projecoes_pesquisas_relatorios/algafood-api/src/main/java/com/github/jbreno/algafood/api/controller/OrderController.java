@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.github.jbreno.algafood.api.assembler.OrderDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.OrderInputDisasembler;
 import com.github.jbreno.algafood.api.assembler.OrderResumDTOAssembler;
@@ -34,6 +31,7 @@ import com.github.jbreno.algafood.domain.service.IssuanceOrderService;
 import com.github.jbreno.algafood.domain.service.OrderRegistrationService;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 import com.github.jbreno.algafood.domain.service.UserRegistrationService;
+
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -60,25 +58,29 @@ public class OrderController {
 	@Autowired
 	private IssuanceOrderService issuanceOrder;
 
-//	@GetMapping
-//	public List<OrderResumDTO> list() {
-//		return orderResumDTOAssembler.toCollectionDTO(orderService.list());
-//	}
-
 	@GetMapping
-	public MappingJacksonValue list() {
-		List<Order> orders = orderService.list();
-		List<OrderResumDTO> orderDto =  orderResumDTOAssembler.toCollectionDTO(orders);
-		
-		MappingJacksonValue ordersWrapper = new MappingJacksonValue(orderDto);
-		
-		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-		filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept("code", "totalValue"));
-		
-		ordersWrapper.setFilters(filterProvider);
-		
-		return ordersWrapper;
+	public List<OrderResumDTO> list() {
+		return orderResumDTOAssembler.toCollectionDTO(orderService.list());
 	}
+
+//	@GetMapping
+//	public MappingJacksonValue list(@RequestParam(required = false) String camps) {
+//		List<Order> orders = orderService.list();
+//		List<OrderResumDTO> orderDto =  orderResumDTOAssembler.toCollectionDTO(orders);
+//		
+//		MappingJacksonValue ordersWrapper = new MappingJacksonValue(orderDto);
+//		
+//		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+//		filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.serializeAll());
+//		
+//		if(StringUtils.isNotBlank(camps)) {
+//			filterProvider.addFilter("orderFilter", SimpleBeanPropertyFilter.filterOutAllExcept(camps.split(",")));
+//		}
+//			
+//		ordersWrapper.setFilters(filterProvider);
+//		
+//		return ordersWrapper;
+//	}
 	
 	@GetMapping("/{code}")
 	public OrderDTO search(@PathVariable String code) {

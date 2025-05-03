@@ -5,6 +5,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +25,7 @@ import com.github.jbreno.algafood.api.assembler.KitchenInputDisasembler;
 import com.github.jbreno.algafood.api.model.KitchenDTO;
 import com.github.jbreno.algafood.api.model.input.KitchenInputDTO;
 import com.github.jbreno.algafood.domain.model.Kitchen;
+import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
 
 
@@ -33,14 +38,21 @@ public class KitchenController {
 	private KitchenRegistrationService kitchenService;
 	
 	@Autowired
+	private KitchenRepository kitchenRepository;
+	
+	@Autowired
 	private KitchenInputDisasembler kitchenInputDisasembler;
 	
 	@Autowired
 	private KitchenDTOAssembler kitchenDTOAssembler;
 	
 	@GetMapping
-	public List<KitchenDTO> list() {
-		return kitchenDTOAssembler.toCollectionDTO(kitchenService.list());
+	public Page<KitchenDTO> list(@PageableDefault(size = 10) Pageable pageable) {
+		Page<Kitchen> kitchensPage = kitchenRepository.findAll(pageable);
+		List<KitchenDTO> kitchenDto = kitchenDTOAssembler.toCollectionDTO(kitchensPage.getContent());
+		
+		Page<KitchenDTO> kitchenDtoPage = new PageImpl<>(kitchenDto, pageable, kitchensPage.getTotalElements());
+		return kitchenDtoPage;
 	}
 	
 	@GetMapping("/{id}")

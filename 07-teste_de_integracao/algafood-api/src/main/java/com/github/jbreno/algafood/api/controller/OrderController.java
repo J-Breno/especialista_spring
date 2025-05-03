@@ -62,9 +62,9 @@ public class OrderController {
 		return orderResumDTOAssembler.toCollectionDTO(orderService.list());
 	}
 
-	@GetMapping("/{id}")
-	public OrderDTO search(@PathVariable Long id) {
-		Order order = orderService.searchOrFail(id);
+	@GetMapping("/{code}")
+	public OrderDTO search(@PathVariable String code) {
+		Order order = issuanceOrder.searchOrFail(code);
 
 		return orderDTOAssembler.toModel(order);
 	}

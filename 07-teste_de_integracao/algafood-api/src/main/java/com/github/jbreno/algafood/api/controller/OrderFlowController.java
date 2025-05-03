@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.jbreno.algafood.domain.service.OrderFlowService;
 
 @RestController
-@RequestMapping(value = "/orders/{orderId}")
+@RequestMapping(value = "/orders/{code}")
 public class OrderFlowController {
 	
 	@Autowired
@@ -19,19 +19,19 @@ public class OrderFlowController {
 	
 	@PutMapping("/confirmation")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirm(@PathVariable Long orderId) {
-		orderFlowService.confirm(orderId);
+	public void confirm(@PathVariable String code) {
+		orderFlowService.confirm(code);
 	}
 
 	@PutMapping("/canceled")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void caceled(@PathVariable Long orderId) {
-		orderFlowService.canceled(orderId);
+	public void caceled(@PathVariable String code) {
+		orderFlowService.canceled(code);
 	}
 	
 	@PutMapping("/delivered")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delivered(@PathVariable Long orderId) {
-		orderFlowService.delivered(orderId);
+	public void delivered(@PathVariable String code) {
+		orderFlowService.delivered(code);
 	}
 }

@@ -87,8 +87,8 @@ public class IssuanceOrderService {
 		});
 	}
 	
-	public Order searchOrFail(Long id) {
-		return orderRepository.findById(id)
-				.orElseThrow(() -> new OrderNotFoundException(id));
+	public Order searchOrFail(String codeOrder) {
+		return orderRepository.findByCode(codeOrder)
+				.orElseThrow(() -> new OrderNotFoundException(codeOrder));
 	}
 }

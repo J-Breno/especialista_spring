@@ -40,7 +40,7 @@ public class OrderRegistrationService {
 			orderRepository.deleteById(id);
 			orderRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
-			throw new OrderNotFoundException(id);
+			throw new OrderNotFoundException("");
 		} 
 		catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -50,6 +50,6 @@ public class OrderRegistrationService {
 	
 	public Order searchOrFail(Long id) {
 		return orderRepository.findById(id)
-				.orElseThrow(() -> new OrderNotFoundException(id));
+				.orElseThrow(() -> new OrderNotFoundException(""));
 	}
 }

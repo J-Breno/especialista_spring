@@ -12,20 +12,20 @@ public class OrderFlowService {
 	private IssuanceOrderService issuanceOrder;
 
 	@Transactional
-	public void confirm(Long id) {
-		Order order = issuanceOrder.searchOrFail(id);
+	public void confirm(String code) {
+		Order order = issuanceOrder.searchOrFail(code);
 		order.confirm();
 	}
 	
 	@Transactional
-	public void canceled(Long id) {
-		Order order = issuanceOrder.searchOrFail(id);
+	public void canceled(String code) {
+		Order order = issuanceOrder.searchOrFail(code);
 		order.canceled();
 	}
 	
 	@Transactional
-	public void delivered(Long id) {
-		Order order = issuanceOrder.searchOrFail(id);
+	public void delivered(String code) {
+		Order order = issuanceOrder.searchOrFail(code);
 		order.delivered();
 	}
 	

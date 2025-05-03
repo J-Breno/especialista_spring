@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,6 +39,8 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
+	
+	private String code;
 	
 	@Column(nullable = false)
 	private BigDecimal subtotal;
@@ -119,10 +123,15 @@ public class Order {
 	private void setStatus(OrderStatus newStatus) {
 		if(getStatus().cannnotChangeTo(newStatus)) {
 			throw new BusinessException(
-					String.format("Status do pedido %d não pode ser alterado de %s para %s", 
-							getId(), getStatus().getDescription(), newStatus.getDescription()));
+					String.format("Status do pedido %s não pode ser alterado de %s para %s", 
+							getCode(), getStatus().getDescription(), newStatus.getDescription()));
 		}
 		
 		this.status = newStatus;
+	}
+	
+	@PrePersist
+	private void generatedCode() {
+		setCode(UUID.randomUUID().toString());
 	}
 }

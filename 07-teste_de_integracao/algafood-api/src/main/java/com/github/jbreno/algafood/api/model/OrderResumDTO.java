@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class OrderResumDTO {
-	private Long id;
+	private String code;
 	private BigDecimal subtotal;
 	private BigDecimal shippingFee;
 	private BigDecimal totalValue;

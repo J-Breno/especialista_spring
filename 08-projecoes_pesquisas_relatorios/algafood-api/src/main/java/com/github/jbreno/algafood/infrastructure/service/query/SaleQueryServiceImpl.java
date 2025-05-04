@@ -1,4 +1,4 @@
-package com.github.jbreno.algafood.infrastructure.service;
+package com.github.jbreno.algafood.infrastructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;

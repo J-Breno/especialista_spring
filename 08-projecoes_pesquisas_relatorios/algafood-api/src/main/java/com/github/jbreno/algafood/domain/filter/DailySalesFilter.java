@@ -1,4 +1,4 @@
-package com.github.jbreno.algafood.domain.repository.filter;
+package com.github.jbreno.algafood.domain.filter;
 
 import java.time.OffsetDateTime;
 
@@ -8,15 +8,15 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
-public class OrderFilter {
-	
-	private Long clientId;
+@Setter
+public class DailySalesFilter {
+
 	private Long restaurantId;
-	
+
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private OffsetDateTime creationDateStart;
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private OffsetDateTime creationDateEnd;
+
 }

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.github.jbreno.algafood.domain.filter.OrderFilter;
 import com.github.jbreno.algafood.domain.model.Order;
-import com.github.jbreno.algafood.domain.repository.filter.OrderFilter;
+
 import javax.persistence.criteria.Predicate;
 
 public class OrderSpecs {

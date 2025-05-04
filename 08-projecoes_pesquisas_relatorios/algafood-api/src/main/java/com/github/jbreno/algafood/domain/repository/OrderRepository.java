@@ -16,4 +16,5 @@ public interface OrderRepository extends JpaRepository<Order, Long>,
 	
 	@Query("from Order o join fetch o.client join fetch o.restaurant r join fetch r.kitchen")
 	List<Order> findAll();
+	
 }

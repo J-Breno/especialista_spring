@@ -7,6 +7,6 @@ import com.github.jbreno.algafood.domain.model.dto.DailySale;
 
 public interface SalesQueryService {
 
-	List<DailySale> checkDailySales(DailySalesFilter filter);
+	List<DailySale> checkDailySales(DailySalesFilter filter, String timeOffSet);
 	
 }

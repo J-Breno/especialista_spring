@@ -45,7 +45,7 @@ public interface OrderControllerOpenApi {
 		@ApiResponse(code = 201, message = "pedido cadastrada"),
 	})
 	public OrderDTO add(
-			@ApiParam(name = "corpo", value = "Representação de um nova pedido")
+			@ApiParam(name = "corpo", value = "Representação de um nova pedido", required = true)
 			OrderInputDTO orderInputDTO) ;
 	
 	@ApiOperation("Atualiza um pedido por ID")
@@ -54,7 +54,7 @@ public interface OrderControllerOpenApi {
 		@ApiResponse(code = 404, message = "pedido não encontrada", response =  Problem.class)
 	})
 	public OrderDTO update(
-			@ApiParam(value = "ID de um pedido", example = "1")
+			@ApiParam(value = "ID de um pedido", example = "1", required = true)
 			Long id,
 			@ApiParam(name = "corpo", value = "Representação de um pedido com os novos dados")
 			OrderInputDTO orderInputDTO);
@@ -65,6 +65,6 @@ public interface OrderControllerOpenApi {
 		@ApiResponse(code = 404, message = "pedido não encontrada", response =  Problem.class)
 	})
 	public void remove(
-			@ApiParam(value = "ID de um pedido", example = "1")
+			@ApiParam(value = "ID de um pedido", example = "1", required = true)
 					Long id);
 }

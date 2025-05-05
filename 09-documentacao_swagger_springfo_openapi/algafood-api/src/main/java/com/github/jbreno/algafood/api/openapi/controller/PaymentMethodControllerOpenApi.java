@@ -31,7 +31,7 @@ public interface PaymentMethodControllerOpenApi {
 		@ApiResponse(code = 201, message = "forma de pagamento cadastrada"),
 	})
 	public PaymentMethodDTO add(
-			@ApiParam(name = "corpo", value = "Representação de uma nova forma de pagamento")
+			@ApiParam(name = "corpo", value = "Representação de uma nova forma de pagamento", required = true)
 			PaymentMethodInputDTO paymentMethodInputDTO) ;
 	
 	@ApiOperation("Atualiza uma forma de pagamento por ID")
@@ -40,7 +40,7 @@ public interface PaymentMethodControllerOpenApi {
 		@ApiResponse(code = 404, message = "forma de pagamento não encontrada", response =  Problem.class)
 	})
 	public PaymentMethodDTO update(
-			@ApiParam(value = "ID de uma forma de pagamento", example = "1")
+			@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
 			Long id,
 			@ApiParam(name = "corpo", value = "Representação de uma forma de pagamento com os novos dados")
 			PaymentMethodInputDTO paymentMethodInputDTO);
@@ -51,6 +51,6 @@ public interface PaymentMethodControllerOpenApi {
 		@ApiResponse(code = 404, message = "forma de pagamento não encontrada", response =  Problem.class)
 	})
 	public void remove(
-			@ApiParam(value = "ID de uma forma de pagamento", example = "1")
+			@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
 					Long id);
 }

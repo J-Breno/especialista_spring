@@ -31,7 +31,7 @@ public interface GroupControllerOpenApi {
 		@ApiResponse(code = 201, message = "grupo cadastrado"),
 	})
 	public GroupDTO add(
-			@ApiParam(name = "corpo", value = "Representação de uma nova grupo")
+			@ApiParam(name = "corpo", value = "Representação de uma nova grupo", required = true)
 			GroupInputDTO groupInputDTO) ;
 	
 	@ApiOperation("Atualiza um grupo por ID")
@@ -40,7 +40,7 @@ public interface GroupControllerOpenApi {
 		@ApiResponse(code = 404, message = "grupo não encontrado", response =  Problem.class)
 	})
 	public GroupDTO update(
-			@ApiParam(value = "ID de um grupo", example = "1")
+			@ApiParam(value = "ID de um grupo", example = "1", required = true)
 			Long id,
 			@ApiParam(name = "corpo", value = "Representação de um grupo com os novos dados")
 			GroupInputDTO groupInputDTO);
@@ -51,7 +51,7 @@ public interface GroupControllerOpenApi {
 		@ApiResponse(code = 404, message = "grupo não encontrado", response =  Problem.class)
 	})
 	public void remove(
-			@ApiParam(value = "ID de um grupo", example = "1")
+			@ApiParam(value = "ID de um grupo", example = "1", required = true)
 					Long id);
 
 }

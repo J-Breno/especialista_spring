@@ -22,20 +22,16 @@ import com.github.jbreno.algafood.api.assembler.RestaurantInputDisasembler;
 import com.github.jbreno.algafood.api.model.RestaurantDTO;
 import com.github.jbreno.algafood.api.model.input.RestaurantInputDTO;
 import com.github.jbreno.algafood.api.model.view.RestaurantView;
-import com.github.jbreno.algafood.api.openapi.model.RestaurantsBasicDtoOpenApi;
+import com.github.jbreno.algafood.api.openapi.controller.RestaurantControllerOpenApi;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.CityNotFoundException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 @RequestMapping(value = "/restaurants")
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerOpenApi{
 	
 	@Autowired
 	private RestaurantRegistrationService restaurantService;
@@ -46,22 +42,14 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantInputDisasembler restaurantInputDisasembler;
 
-	@ApiOperation(value = "Lista retaurantes", response = RestaurantsBasicDtoOpenApi.class)
-	@ApiImplicitParams({
-		@ApiImplicitParam(
-				value = "Nome da projeção de pedidos",
-				allowableValues = "name-only",
-				name = "projecao",
-				paramType = "query",
-				type = "string")
-	})
+	
 	@JsonView(RestaurantView.Resum.class)
 	@GetMapping
 	public List<RestaurantDTO> list() {
 		return restaurantDTOAssembler.toCollectionDTO(restaurantService.list());
 	}
 	
-	@ApiOperation(value = "Lista retaurantes", hidden = true)
+	
 	@JsonView(RestaurantView.NameOnly.class)
 	@GetMapping(params = "projections=name-only")
 	public List<RestaurantDTO> listNameOnly() {

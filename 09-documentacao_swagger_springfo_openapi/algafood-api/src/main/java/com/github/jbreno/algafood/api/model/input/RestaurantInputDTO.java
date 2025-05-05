@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +15,11 @@ import lombok.Setter;
 @Setter
 public class RestaurantInputDTO {
 	@NotBlank
+	@ApiModelProperty(example = "Thai Gourmet", required = true)
 	private String name;
 	@NotNull
 	@PositiveOrZero
+	@ApiModelProperty(example = "20.19", required = true)
 	private BigDecimal shippingFee;
 	@Valid
 	@NotNull

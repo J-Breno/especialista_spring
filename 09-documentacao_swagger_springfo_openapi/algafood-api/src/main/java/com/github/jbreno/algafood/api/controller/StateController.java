@@ -20,12 +20,13 @@ import com.github.jbreno.algafood.api.assembler.StateDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.StateInputDisasembler;
 import com.github.jbreno.algafood.api.model.StateDTO;
 import com.github.jbreno.algafood.api.model.input.StateInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.StateControllerOpenApi;
 import com.github.jbreno.algafood.domain.model.State;
 import com.github.jbreno.algafood.domain.service.StateRegistrationService;
 
 @RestController
 @RequestMapping("/states")
-public class StateController {
+public class StateController implements StateControllerOpenApi{
 	
 	@Autowired
 	private StateRegistrationService stateService;
@@ -37,13 +38,13 @@ public class StateController {
 	private StateDTOAssembler stateDTOAssembler;
 	
 	@GetMapping
-	public List<State> list() {
-		return stateService.list();
+	public List<StateDTO> list() {
+		return stateDTOAssembler.toCollectionDTO(stateService.list());
 	}
 	
 	@GetMapping("/{id}")
-	public State search(@PathVariable Long id){
-		return stateService.searchOrFail(id);
+	public StateDTO search(@PathVariable Long id){
+		return stateDTOAssembler.toModel(stateService.searchOrFail(id));
 	}
 	
 	@PostMapping

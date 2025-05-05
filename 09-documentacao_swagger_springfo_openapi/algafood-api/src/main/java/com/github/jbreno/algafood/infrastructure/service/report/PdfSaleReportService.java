@@ -35,4 +35,4 @@ public class PdfSaleReportService implements SaleReportService {
 			throw new ReportException("Não foi possível emitir relátorio de vendas diárias", e);
 		}
 	}
-}	
+}

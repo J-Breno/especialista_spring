@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CityInputDTO {
-	@ApiModelProperty(example = "Fortaleza")
+	@ApiModelProperty(example = "Fortaleza", required = true)
 	@NotBlank
 	private String name;
 	@Valid

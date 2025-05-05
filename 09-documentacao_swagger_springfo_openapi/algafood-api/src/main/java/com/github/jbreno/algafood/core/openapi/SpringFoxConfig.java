@@ -17,7 +17,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.fasterxml.classmate.TypeResolver;
 import com.github.jbreno.algafood.api.exceptionhandler.Problem;
 import com.github.jbreno.algafood.api.model.KitchenDTO;
-import com.github.jbreno.algafood.api.openapi.model.KitchensDtoOenApi;
+import com.github.jbreno.algafood.api.model.OrderResumDTO;
+import com.github.jbreno.algafood.api.openapi.model.KitchensDtoOpenApi;
+import com.github.jbreno.algafood.api.openapi.model.OrdersDtoOpenApi;
 import com.github.jbreno.algafood.api.openapi.model.PageableDtoOpenApi;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -59,12 +61,16 @@ public class SpringFoxConfig implements WebMvcConfigurer{
 				.directModelSubstitute(Pageable.class, PageableDtoOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(Page.class, KitchenDTO.class),
-						KitchensDtoOenApi.class))
+						KitchensDtoOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(Page.class, OrderResumDTO.class),
+						OrdersDtoOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(
 						new Tag("Cidades", "Gerencia as cidades"),
 						new Tag("Grupos", "Gerencia os grupos de usuário"),
 						new Tag("Formas de pagamento", "Gerencia as formas de pagamento"),
+						new Tag("Pedidos", "Gerencia pedidos"),
 						new Tag("Cozinhas", "Gerencia as cozinhas")
 						);
 	}

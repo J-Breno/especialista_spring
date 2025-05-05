@@ -26,6 +26,7 @@ import com.github.jbreno.algafood.api.assembler.OrderResumDTOAssembler;
 import com.github.jbreno.algafood.api.model.OrderDTO;
 import com.github.jbreno.algafood.api.model.OrderResumDTO;
 import com.github.jbreno.algafood.api.model.input.OrderInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.OrderControllerOpenApi;
 import com.github.jbreno.algafood.core.data.PageableTranslator;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.OrderNotFoundException;
@@ -44,7 +45,7 @@ import com.google.common.collect.ImmutableMap;
 
 @RestController
 @RequestMapping(value = "/orders")
-public class OrderController {
+public class OrderController implements OrderControllerOpenApi{
 
 	@Autowired
 	private OrderRegistrationService orderService;
@@ -71,7 +72,7 @@ public class OrderController {
 	private OrderRepository orderRepository;
 
 	@GetMapping
-	public Page<OrderResumDTO> search(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
+	public Page<OrderResumDTO> list(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
 		pageable = translatePageable(pageable);
 		Page<Order> ordersPage = orderRepository.findAll(OrderSpecs.usingFilter(orderFilter), pageable);
 		

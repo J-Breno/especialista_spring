@@ -26,9 +26,6 @@ import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.PaymentMethod;
 import com.github.jbreno.algafood.domain.service.PaymentMethodRegistrationService;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-
 @RestController
 @RequestMapping(value = "/payments")
 public class PaymentMethodController implements PaymentMethodControllerOpenApi{
@@ -42,19 +39,12 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi{
 	@Autowired
 	private PaymentMethodInputDisasembler paymentMethodDisassembler;
 	
-	@ApiImplicitParams({
-		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-				name="campos", paramType = "query", type = "string")
-	})
 	@GetMapping
 	public List<PaymentMethodDTO> list() {
 		return paymentMethodDTOAssembler.toCollectionDTO(paymentMethodService.list());
 	}
 
-	@ApiImplicitParams({
-		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-				name="campos", paramType = "query", type = "string")
-	})
+	
 	@GetMapping("/{id}")
 	public PaymentMethodDTO search(@PathVariable Long id) {
 		PaymentMethod paymentMethod = paymentMethodService.searchOrFail(id);

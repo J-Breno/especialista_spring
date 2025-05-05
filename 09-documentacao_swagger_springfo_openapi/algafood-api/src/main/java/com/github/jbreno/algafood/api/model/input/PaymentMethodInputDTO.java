@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class PaymentMethodInputDTO {
 	@NotBlank
-	@ApiModelProperty(example = "Forma de pagamento da cozinha")
+	@ApiModelProperty(example = "Forma de pagamento da cozinha", required = true)
 	private String description;
 }

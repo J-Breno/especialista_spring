@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class PaymentMethodIdInput {
 	@NotNull
-	@ApiModelProperty(example = "1")
+	@ApiModelProperty(example = "1", required = true)
 	private Long id;
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Problem {
-	@ApiModelProperty(example = "2019-10-30T00:00:00Z", position = 5)
+	@ApiModelProperty(example = "2025-05-05T02:20:00.7207858", position = 5)
 	private LocalDateTime dateTime;
 	@ApiModelProperty(example = "400", position = 1)
 	private Integer status;

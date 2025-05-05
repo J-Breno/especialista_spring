@@ -25,6 +25,9 @@ import com.github.jbreno.algafood.domain.exception.StateNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.service.CityRegistrationService;
 
+import io.swagger.annotations.Api;
+
+@Api(tags = "Cities")
 @RestController
 @RequestMapping("/cities")
 public class CityController {

@@ -17,9 +17,9 @@ public interface CityControllerOpenApi {
 	@ApiOperation("Lista cidades")
 	public List<CityDTO> list() ;
 	
-	@ApiOperation("Busca um cidade por ID")
+	@ApiOperation("Busca uma cidade por ID")
 	@ApiResponses({
-		@ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
+		@ApiResponse(code = 400, message = "ID da cidade inválida", response = Problem.class),
 		@ApiResponse(code = 404, message = "Cidade não encontrada", response =  Problem.class)
 	})
 	public CityDTO search(

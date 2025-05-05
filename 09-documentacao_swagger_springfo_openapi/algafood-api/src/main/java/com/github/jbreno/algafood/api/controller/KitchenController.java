@@ -24,6 +24,7 @@ import com.github.jbreno.algafood.api.assembler.KitchenDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.KitchenInputDisasembler;
 import com.github.jbreno.algafood.api.model.KitchenDTO;
 import com.github.jbreno.algafood.api.model.input.KitchenInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.KitchenControllerOpenApi;
 import com.github.jbreno.algafood.domain.model.Kitchen;
 import com.github.jbreno.algafood.domain.repository.KitchenRepository;
 import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
@@ -31,7 +32,7 @@ import com.github.jbreno.algafood.domain.service.KitchenRegistrationService;
 
 @RestController
 @RequestMapping(value = "/kitchens")
-public class KitchenController {
+public class KitchenController implements KitchenControllerOpenApi{
 	
 	
 	@Autowired

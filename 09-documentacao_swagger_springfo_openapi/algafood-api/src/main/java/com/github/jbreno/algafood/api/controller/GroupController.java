@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ import com.github.jbreno.algafood.domain.model.Group;
 import com.github.jbreno.algafood.domain.service.GroupRegistrationService;
 
 @RestController
-@RequestMapping(value = "/groups")
+@RequestMapping(path = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GroupController implements GroupControllerOpenApi{
 	
 	@Autowired

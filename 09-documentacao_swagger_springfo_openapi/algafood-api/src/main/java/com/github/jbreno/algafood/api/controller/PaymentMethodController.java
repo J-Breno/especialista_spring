@@ -20,6 +20,7 @@ import com.github.jbreno.algafood.api.assembler.PaymentMethodDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.PaymentMethodInputDisasembler;
 import com.github.jbreno.algafood.api.model.PaymentMethodDTO;
 import com.github.jbreno.algafood.api.model.input.PaymentMethodInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.PaymentMethodControllerOpenApi;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.RestaurantNotFoundException;
 import com.github.jbreno.algafood.domain.model.PaymentMethod;
@@ -27,7 +28,7 @@ import com.github.jbreno.algafood.domain.service.PaymentMethodRegistrationServic
 
 @RestController
 @RequestMapping(value = "/payments")
-public class PaymentMethodController {
+public class PaymentMethodController implements PaymentMethodControllerOpenApi{
 	
 	@Autowired
 	private PaymentMethodRegistrationService paymentMethodService;

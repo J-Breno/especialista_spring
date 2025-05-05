@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.GroupDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.GroupInputDisasembler;
-import com.github.jbreno.algafood.api.controller.openapi.GroupControllerOpenApi;
 import com.github.jbreno.algafood.api.model.GroupDTO;
 import com.github.jbreno.algafood.api.model.input.GroupInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.GroupControllerOpenApi;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.GroupNotFoundException;
 import com.github.jbreno.algafood.domain.model.Group;

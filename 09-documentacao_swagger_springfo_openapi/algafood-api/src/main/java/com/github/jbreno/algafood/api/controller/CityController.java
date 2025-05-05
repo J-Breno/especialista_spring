@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.CityDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.CityInputDisasembler;
-import com.github.jbreno.algafood.api.controller.openapi.CityControllerOpenApi;
 import com.github.jbreno.algafood.api.model.CityDTO;
 import com.github.jbreno.algafood.api.model.input.CityInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.CityControllerOpenApi;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.StateNotFoundException;
 import com.github.jbreno.algafood.domain.model.City;

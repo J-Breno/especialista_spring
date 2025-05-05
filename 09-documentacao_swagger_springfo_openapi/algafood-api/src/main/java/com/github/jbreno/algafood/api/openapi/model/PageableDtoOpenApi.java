@@ -1,4 +1,4 @@
-package com.github.jbreno.algafood.core.openapi.model;
+package com.github.jbreno.algafood.api.openapi.model;
 
 import java.util.List;
 

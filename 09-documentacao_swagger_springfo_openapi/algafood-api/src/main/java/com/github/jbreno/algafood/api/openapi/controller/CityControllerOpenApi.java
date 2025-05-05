@@ -1,4 +1,4 @@
-package com.github.jbreno.algafood.api.controller.openapi;
+package com.github.jbreno.algafood.api.openapi.controller;
 
 import java.util.List;
 

@@ -15,13 +15,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.github.jbreno.algafood.api.exceptionhandler.Problem;
-import com.github.jbreno.algafood.core.openapi.model.PageableDtoOpenApi;
+import com.github.jbreno.algafood.api.model.KitchenDTO;
+import com.github.jbreno.algafood.api.openapi.model.KitchensDtoOenApi;
+import com.github.jbreno.algafood.api.openapi.model.PageableDtoOpenApi;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -52,6 +55,9 @@ public class SpringFoxConfig implements WebMvcConfigurer{
 				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
 				.additionalModels(typeResolver.resolve(Problem.class))
 				.directModelSubstitute(Pageable.class, PageableDtoOpenApi.class)
+				.alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(Page.class, KitchenDTO.class),
+						KitchensDtoOenApi.class))
 				.apiInfo(apiInfo())
 				.tags(
 						new Tag("Cidades", "Gerencia as cidades"),

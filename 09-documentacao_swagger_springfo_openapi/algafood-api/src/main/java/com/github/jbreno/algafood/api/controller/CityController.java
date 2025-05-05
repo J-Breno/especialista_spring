@@ -26,6 +26,7 @@ import com.github.jbreno.algafood.domain.model.City;
 import com.github.jbreno.algafood.domain.service.CityRegistrationService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 @Api(tags = "Cities")
 @RestController
@@ -42,18 +43,22 @@ public class CityController {
 	private CityInputDisasembler cityInputDisasembler;
 	
 	@GetMapping
-	public List<City> list() {
-		return cityService.list();
+	public List<CityDTO> list() {
+		return cityDTOAssembler.toCollectionDTO(cityService.list());
 	}
 	
 	@GetMapping("/{id}")
-	public City search(@PathVariable Long id) {
-		return cityService.searchOrFail(id);
+	public CityDTO search(
+			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@PathVariable Long id) {
+		return cityDTOAssembler.toModel(cityService.searchOrFail(id));
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CityDTO add(@RequestBody @Valid CityInputDTO cityInputDTO) {
+	public CityDTO add(
+			@ApiParam(name = "corpo", value = "Representação de uma nova cidade")
+			@RequestBody @Valid CityInputDTO cityInputDTO) {
 		try {
 			City city =  cityInputDisasembler.toDomainObject(cityInputDTO);
 			return cityDTOAssembler.toModel(cityService.save(city));
@@ -64,7 +69,11 @@ public class CityController {
 	}
 	
 	@PutMapping("/{id}")
-	public CityDTO update(@PathVariable Long id,@RequestBody @Valid CityInputDTO cityInputDTO) {
+	public CityDTO update(
+			@ApiParam(value = "ID de uma cidade", example = "1")
+			@PathVariable Long id,
+			@ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados")
+			@RequestBody @Valid CityInputDTO cityInputDTO) {
 		try {
 			City currentCity = cityService.searchOrFail(id);
 			
@@ -79,7 +88,9 @@ public class CityController {
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remove(@PathVariable Long id) {	
+	public void remove(
+			@ApiParam(value = "ID de uma cidade", example = "1")
+			@PathVariable Long id) {	
 		cityService.remove(id);
 	}
 }

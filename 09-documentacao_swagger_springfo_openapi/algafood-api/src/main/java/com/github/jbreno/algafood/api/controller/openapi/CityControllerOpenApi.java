@@ -45,7 +45,7 @@ public interface CityControllerOpenApi {
 			@ApiParam(name = "corpo", value = "Representação de uma cidade com os novos dados")
 			CityInputDTO cityInputDTO);
 	
-	@ApiOperation("Deleta uma cidade")
+	@ApiOperation("Deleta uma cidade por ID")
 	@ApiResponses({
 		@ApiResponse(code = 204, message = "Cidade excluída"),
 		@ApiResponse(code = 404, message = "Cidade não encontrada", response =  Problem.class)

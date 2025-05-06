@@ -21,6 +21,7 @@ import com.github.jbreno.algafood.api.assembler.ProductDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.ProductInputDisasembler;
 import com.github.jbreno.algafood.api.model.ProductDTO;
 import com.github.jbreno.algafood.api.model.input.ProductInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.ProductControllerOpenApi;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.ProductNotFoundException;
 import com.github.jbreno.algafood.domain.model.Product;
@@ -31,7 +32,7 @@ import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
 @RestController
 @RequestMapping(value = "/restaurants/{restaurantId}/products")
-public class ProductController {
+public class ProductController implements ProductControllerOpenApi{
 	
 	@Autowired
 	private ProductRegistrationService productService;

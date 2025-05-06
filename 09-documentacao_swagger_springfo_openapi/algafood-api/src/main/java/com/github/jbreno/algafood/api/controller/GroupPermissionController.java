@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.PermissionDTOAssembler;
 import com.github.jbreno.algafood.api.model.PermissionDTO;
+import com.github.jbreno.algafood.api.openapi.controller.GroupPermissionControllerOpenApi;
 import com.github.jbreno.algafood.domain.model.Group;
 import com.github.jbreno.algafood.domain.service.GroupRegistrationService;
 
 @RestController
 @RequestMapping(value = "/groups/{id}/permissions")
-public class GroupPermissionController {
+public class GroupPermissionController implements GroupPermissionControllerOpenApi{
 	
 	@Autowired
 	private GroupRegistrationService groupService;

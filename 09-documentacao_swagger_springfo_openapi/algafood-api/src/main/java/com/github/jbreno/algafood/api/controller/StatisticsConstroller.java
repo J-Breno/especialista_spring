@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.jbreno.algafood.api.openapi.controller.StatisticControllerOpenApi;
 import com.github.jbreno.algafood.domain.filter.DailySalesFilter;
 import com.github.jbreno.algafood.domain.model.dto.DailySale;
 import com.github.jbreno.algafood.domain.service.SaleReportService;
@@ -18,7 +19,7 @@ import com.github.jbreno.algafood.domain.service.SalesQueryService;
 
 @RestController
 @RequestMapping(path = "/statistics")
-public class StatisticsConstroller {
+public class StatisticsConstroller implements StatisticControllerOpenApi{
 	
 	@Autowired
 	private SalesQueryService saleQueryService;

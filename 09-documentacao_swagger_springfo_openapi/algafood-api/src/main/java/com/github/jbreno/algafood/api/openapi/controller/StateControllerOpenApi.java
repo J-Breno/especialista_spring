@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Estados")
 public interface StateControllerOpenApi {
-	@ApiOperation("Lista estatod")
+	@ApiOperation("Lista estado")
 	public List<StateDTO> list() ;
 	
 	@ApiOperation("Busca um estado por ID")

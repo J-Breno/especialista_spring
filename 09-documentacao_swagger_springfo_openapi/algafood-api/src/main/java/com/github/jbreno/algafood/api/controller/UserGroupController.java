@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.GroupDTOAssembler;
 import com.github.jbreno.algafood.api.model.GroupDTO;
+import com.github.jbreno.algafood.api.openapi.controller.UserGroupControllerOpenApi;
 import com.github.jbreno.algafood.domain.model.User;
 import com.github.jbreno.algafood.domain.service.UserRegistrationService;
 
 @RestController
 @RequestMapping(value = "/users/{id}/groups")
-public class UserGroupController {
+public class UserGroupController implements UserGroupControllerOpenApi{
 	
 	@Autowired
 	private UserRegistrationService userService;

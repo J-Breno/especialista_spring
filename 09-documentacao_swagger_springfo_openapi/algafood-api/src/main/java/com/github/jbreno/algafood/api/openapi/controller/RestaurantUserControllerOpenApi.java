@@ -15,15 +15,15 @@ public interface RestaurantUserControllerOpenApi {
 
 	@ApiOperation(value = "Lista usuários de um restaurante")
 	public List<UserDTO> list(
-			@ApiParam(value = "ID de um restaurante", example = "1", required = true) @PathVariable Long id);
+			@ApiParam(value = "ID de um restaurante", example = "1", required = true)  Long id);
 
 	@ApiOperation(value = "disassocia usuário de um restaurante")
 	public void disassociate(
-			@ApiParam(value = "ID de um restaurante", example = "1", required = true) @PathVariable Long id,
-			@ApiParam(value = "ID de usuário de um restaurante", example = "1", required = true) @PathVariable Long userId);
+			@ApiParam(value = "ID de um restaurante", example = "1", required = true)  Long id,
+			@ApiParam(value = "ID de usuário de um restaurante", example = "1", required = true)  Long userId);
 
 	@ApiOperation(value = "associa usuário de um restaurante")
 	public void associate(
-			@ApiParam(value = "ID de um restaurante", example = "1", required = true) @PathVariable Long id,
-			@ApiParam(value = "ID de usuário de um restaurante", example = "1", required = true) @PathVariable Long userId);
+			@ApiParam(value = "ID de um restaurante", example = "1", required = true)  Long id,
+			@ApiParam(value = "ID de usuário de um restaurante", example = "1", required = true)  Long userId);
 }

@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.jbreno.algafood.api.assembler.PaymentMethodDTOAssembler;
 import com.github.jbreno.algafood.api.model.PaymentMethodDTO;
+import com.github.jbreno.algafood.api.openapi.controller.RestaurantPaymentMethodControllerOpenApi;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.service.RestaurantRegistrationService;
 
 @RestController
 @RequestMapping(value = "/restaurants/{id}/payments-method")
-public class RestaurantPaymentMethodController {
+public class RestaurantPaymentMethodController implements RestaurantPaymentMethodControllerOpenApi{
 	
 	@Autowired
 	private RestaurantRegistrationService restaurantService;

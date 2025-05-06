@@ -22,6 +22,7 @@ import com.github.jbreno.algafood.api.model.UserDTO;
 import com.github.jbreno.algafood.api.model.input.PasswordInputDTO;
 import com.github.jbreno.algafood.api.model.input.UserWithPasswordInputDTO;
 import com.github.jbreno.algafood.api.model.input.UserWithoutInputDTO;
+import com.github.jbreno.algafood.api.openapi.controller.UserControllerOpenApi;
 import com.github.jbreno.algafood.domain.exception.BusinessException;
 import com.github.jbreno.algafood.domain.exception.PasswordNotFoundException;
 import com.github.jbreno.algafood.domain.exception.UserNotFoundException;
@@ -30,7 +31,7 @@ import com.github.jbreno.algafood.domain.service.UserRegistrationService;
 
 @RestController
 @RequestMapping(value = "/users")
-public class UserController {
+public class UserController implements UserControllerOpenApi{
 	
 	@Autowired
 	private UserRegistrationService userService;

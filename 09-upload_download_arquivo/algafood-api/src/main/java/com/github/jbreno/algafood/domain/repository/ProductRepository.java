@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.github.jbreno.algafood.domain.model.Product;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 
-public interface ProductRepository extends JpaRepository<Product, Long>{
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryQueries{
 	@Query("SELECT p FROM Product p JOIN p.restaurants r WHERE r.id = :restaurantId")
     List<Product> findAllByRestaurantId(@Param("restaurantId") Long restaurantId);
 

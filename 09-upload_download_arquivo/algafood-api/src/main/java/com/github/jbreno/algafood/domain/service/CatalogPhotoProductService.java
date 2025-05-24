@@ -49,6 +49,16 @@ public class CatalogPhotoProductService {
 		return photo;
 	}
 	
+	@Transactional
+	public void delete(Long restaurantId, Long productId) {
+	    PhotoProduct foto = searchOrFeiel(restaurantId, productId);
+	    
+	    productRepository.delete(foto);
+	    productRepository.flush();
+
+	    photoStorageService.remove(foto.getFileName());
+	}
+	
 	public PhotoProduct searchOrFeiel(Long restaurantId, Long productId) {
 	    return productRepository.findPhotoById(restaurantId, productId)
 	            .orElseThrow(() -> new PhotoProductNotFoundException(restaurantId, productId));

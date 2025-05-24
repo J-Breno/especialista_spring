@@ -7,14 +7,17 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,6 +94,13 @@ public class RestaurantProductPhotoController {
 		}
        
     }
+	
+	@DeleteMapping
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void excluir(@PathVariable Long restaurantId, 
+	        @PathVariable Long productId) {
+		service.delete(restaurantId, productId);
+	}   
 
 	private void checkCompatibilityMediaType(MediaType mediaTypePhoto, List<MediaType> mediaTypeAccepts) throws HttpMediaTypeNotAcceptableException {
 		boolean compactive = mediaTypeAccepts.stream().anyMatch(mediaTypeAccept -> mediaTypeAccept.isCompatibleWith(mediaTypePhoto));

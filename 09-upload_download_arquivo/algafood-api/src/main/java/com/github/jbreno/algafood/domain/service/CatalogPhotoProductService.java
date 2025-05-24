@@ -25,10 +25,12 @@ public class CatalogPhotoProductService {
 		Long restaurantId = photo.getRestaurantId();
 		Long  productId = photo.getProduct().getId();
 		String nameNewFile = photoStorageService.genareteNameFile(photo.getFileName());
+		String nameFileExists = null;
 		
 		Optional<PhotoProduct> photoExists = productRepository.findPhotoById(restaurantId, productId);
 		
 		if(photoExists.isPresent()) {
+			nameFileExists = photoExists.get().getFileName();
 			productRepository.delete(photoExists.get());
 		}
 		
@@ -41,7 +43,7 @@ public class CatalogPhotoProductService {
 				.inputStream(dataFile)
 				.build();
 		
-		photoStorageService.store(newPhoto);
+		photoStorageService.toReplace(nameFileExists, newPhoto);
 		
 		return photo;
 	}

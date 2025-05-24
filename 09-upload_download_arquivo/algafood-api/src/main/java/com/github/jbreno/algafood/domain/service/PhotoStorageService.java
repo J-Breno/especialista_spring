@@ -9,6 +9,16 @@ import lombok.Getter;
 public interface PhotoStorageService {
 	void store(NewPhoto newPhoto);
 	
+	void remove(String nameFile);
+	
+	default void toReplace(String nameFileOld, NewPhoto newPhoto) {
+		this.store(newPhoto);
+		
+		if(nameFileOld != null) {
+			this.remove(nameFileOld);
+		}
+	}
+	
 	default String genareteNameFile(String nameOriginal) {
 		return UUID.randomUUID().toString() + "_" + nameOriginal;
 	}

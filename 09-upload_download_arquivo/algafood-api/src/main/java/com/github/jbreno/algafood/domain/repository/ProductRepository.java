@@ -5,23 +5,21 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
+import com.github.jbreno.algafood.domain.model.PhotoProduct;
 import com.github.jbreno.algafood.domain.model.Product;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryQueries{
-	@Query("SELECT p FROM Product p JOIN p.restaurants r WHERE r.id = :restaurantId")
-    List<Product> findAllByRestaurantId(@Param("restaurantId") Long restaurantId);
+	List<Product> findAllByRestaurantId(Long restaurantId);
 
-    @Query("SELECT p FROM Product p JOIN p.restaurants r WHERE p.id = :productId AND r.id = :restaurantId")
-    Optional<Product> findByIdAndRestaurantId(
-        @Param("productId") Long productId,
-        @Param("restaurantId") Long restaurantId
-    );
+	Optional<Product> findByIdAndRestaurantId(Long productId, Long restaurantId);
     
-    List<Product> findAllByRestaurants(Restaurant restaurant);
+	List<Product> findAllByRestaurant(Restaurant restaurant);
     
-    @Query("from Product p WHERE p.active = true AND p.restaurants = :restaurant")
-    List<Product> findActiveByRestaurant(Restaurant restaurant);
+	@Query("from Product p where p.active = true and p.restaurant = :restaurant")
+	List<Product> findActiveByRestaurant(Restaurant restaurant);
+    
+    @Query("select f from PhotoProduct f join f.product p where p.restaurant.id = :restaurantId and f.product.id = :productId")
+    Optional<PhotoProduct> findPhotoById(Long restaurantId, Long productId);
 }

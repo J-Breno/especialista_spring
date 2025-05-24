@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -75,12 +76,7 @@ public class Restaurant {
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> responsible = new HashSet<>();
 	
-	@ManyToMany
-	@JoinTable(
-	    name = "tb_restaurant_products",
-	    joinColumns = @JoinColumn(name = "restaurant_id"),
-	    inverseJoinColumns = @JoinColumn(name = "product_id")
-	)
+	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 	
 	public void active() {

@@ -5,5 +5,7 @@ import com.github.jbreno.algafood.domain.model.PhotoProduct;
 public interface ProductRepositoryQueries {
 	
 	PhotoProduct save(PhotoProduct photo);
+	
+	void delete(PhotoProduct photo);
 
 }

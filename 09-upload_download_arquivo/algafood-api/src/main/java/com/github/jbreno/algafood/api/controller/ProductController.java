@@ -6,11 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +19,6 @@ import com.github.jbreno.algafood.api.assembler.ProductDTOAssembler;
 import com.github.jbreno.algafood.api.assembler.ProductInputDisasembler;
 import com.github.jbreno.algafood.api.model.ProductDTO;
 import com.github.jbreno.algafood.api.model.input.ProductInputDTO;
-import com.github.jbreno.algafood.domain.exception.BusinessException;
-import com.github.jbreno.algafood.domain.exception.ProductNotFoundException;
 import com.github.jbreno.algafood.domain.model.Product;
 import com.github.jbreno.algafood.domain.model.Restaurant;
 import com.github.jbreno.algafood.domain.repository.ProductRepository;
@@ -54,7 +50,7 @@ public class ProductController {
 		Restaurant restaurant = restaurantService.searchOrFail(restaurantId);
 		List<Product> allProducts = null;
 		if(includeInactive) {
-			allProducts = productRepository.findAllByRestaurants(restaurant);
+			allProducts = productRepository.findAllByRestaurant(restaurant);
 		} else {
 			 allProducts = productRepository.findActiveByRestaurant(restaurant);
 		}
@@ -80,26 +76,5 @@ public class ProductController {
 	    Product savedProduct = productService.save(restaurantId, product);
 
  	    return productDTOAssembler.toModel(savedProduct);
-	}
-	
-	@PutMapping("/{id}")
-	public ProductDTO update(@PathVariable Long restaurantId, @PathVariable Long id,@RequestBody @Valid ProductInputDTO productInputDTO) {
-		try {
-			Product currentProduct = productService.searchOrFail(restaurantId, id);
-			
-			productInputDisassembler.copyToDomainObject(productInputDTO, currentProduct);
-			
-			return productDTOAssembler.toModel(productService.update(restaurantId, id, currentProduct));
-		}
-		catch(ProductNotFoundException e) {
-			throw new BusinessException(e.getMessage(), e);
-		}
-		
-	}
-	
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remove(@PathVariable Long restaurantId, @PathVariable Long id) {	
-		productService.remove(restaurantId, id);
 	}
 }

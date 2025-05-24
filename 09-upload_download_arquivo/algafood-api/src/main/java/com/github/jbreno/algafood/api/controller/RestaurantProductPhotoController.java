@@ -35,7 +35,7 @@ public class RestaurantProductPhotoController {
     public PhotoProductDTO updatePhoto(
             @PathVariable Long restaurantId,
             @PathVariable Long productId,
-            @Valid PhotoProductInput photoProductInput) {
+            @Valid PhotoProductInput photoProductInput) throws Exception {
     	Product product = productService.searchOrFail(restaurantId, productId);
     	PhotoProduct photo = new PhotoProduct();
     	MultipartFile file = photoProductInput.getFile();
@@ -46,7 +46,7 @@ public class RestaurantProductPhotoController {
     	photo.setSize(file.getSize());
     	photo.setFileName(file.getOriginalFilename());
     	
-       PhotoProduct photoSave = service.save(photo);
+       PhotoProduct photoSave = service.save(photo, file.getInputStream());
        
        return photoProductDTOAssembler.toModel(photoSave);
     }

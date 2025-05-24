@@ -11,7 +11,7 @@ public interface PhotoStorageService {
 	
 	void remove(String nameFile);
 	
-	InputStream recuperar(String nomeArquivo);
+	InputStream recover(String nomeArquivo);
 	
 	default void toReplace(String nameFileOld, NewPhoto newPhoto) {
 		this.store(newPhoto);

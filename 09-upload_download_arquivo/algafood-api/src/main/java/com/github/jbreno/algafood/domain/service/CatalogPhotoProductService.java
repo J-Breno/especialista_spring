@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.jbreno.algafood.domain.exception.PhotoProductNotFoundException;
 import com.github.jbreno.algafood.domain.model.PhotoProduct;
 import com.github.jbreno.algafood.domain.repository.ProductRepository;
 import com.github.jbreno.algafood.domain.service.PhotoStorageService.NewPhoto;
@@ -47,4 +48,9 @@ public class CatalogPhotoProductService {
 		
 		return photo;
 	}
+	
+	public PhotoProduct searchOrFeiel(Long restaurantId, Long productId) {
+	    return productRepository.findPhotoById(restaurantId, productId)
+	            .orElseThrow(() -> new PhotoProductNotFoundException(restaurantId, productId));
+	}   
 }

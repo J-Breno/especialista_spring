@@ -40,7 +40,7 @@ public class LocalPhotoStorageService implements PhotoStorageService{
 	}
 	
 	@Override
-	public InputStream recuperar(String nomeArquivo) {
+	public InputStream recover(String nomeArquivo) {
 	    try {
 	        Path arquivoPath = getFilePath(nomeArquivo);
 

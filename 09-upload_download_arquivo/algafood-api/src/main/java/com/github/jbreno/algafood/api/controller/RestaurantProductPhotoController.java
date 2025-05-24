@@ -1,9 +1,14 @@
 package com.github.jbreno.algafood.api.controller;
 
+import java.io.InputStream;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +21,7 @@ import com.github.jbreno.algafood.api.model.input.PhotoProductInput;
 import com.github.jbreno.algafood.domain.model.PhotoProduct;
 import com.github.jbreno.algafood.domain.model.Product;
 import com.github.jbreno.algafood.domain.service.CatalogPhotoProductService;
+import com.github.jbreno.algafood.domain.service.PhotoStorageService;
 import com.github.jbreno.algafood.domain.service.ProductRegistrationService;
 
 @RestController
@@ -27,6 +33,9 @@ public class RestaurantProductPhotoController {
 	
 	@Autowired
 	private CatalogPhotoProductService service;
+	
+	@Autowired
+	private PhotoStorageService phtoPhotoStorageService;
 	
 	@Autowired
 	private PhotoProductDTOAssembler photoProductDTOAssembler;
@@ -49,6 +58,27 @@ public class RestaurantProductPhotoController {
        PhotoProduct photoSave = service.save(photo, file.getInputStream());
        
        return photoProductDTOAssembler.toModel(photoSave);
+    }
+    
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public PhotoProductDTO search(@PathVariable Long restaurantId, 
+            @PathVariable Long productId) {
+        PhotoProduct photoProduct = service.searchOrFeiel(restaurantId, productId);
+        
+        return photoProductDTOAssembler.toModel(photoProduct);
+    }
+    
+    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<InputStreamResource> servePhoto(@PathVariable Long restaurantId, 
+            @PathVariable Long productId) { 
+        PhotoProduct photoProduct = service.searchOrFeiel(restaurantId, productId);
+        
+        InputStream inputStream = phtoPhotoStorageService.recover(photoProduct.getFileName());
+        
+        return ResponseEntity
+        		.ok()
+        		.contentType(MediaType.IMAGE_JPEG)
+        		.body(new InputStreamResource(inputStream));
     }
 
 }
